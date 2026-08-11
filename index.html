@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS System Pro - DH</title>
+    <style>
+        :root {
+            --primary: #900c3f;
+            --success: #22c55e;
+            --danger: #ef4444; 
+            --bg: #0f172a; 
+            --card: #1e293b; 
+            --text: #f8fafc;
+            --border: #334155;
+            --btn-bg: #334155;
+            --btn-hover: #475569;
+            --input-bg: #0f172a;
+        }
+
+        body.light-mode {
+            --bg: #f1f5f9; 
+            --card: #ffffff; 
+            --text: #0f172a;
+            --border: #cbd5e1;
+            --btn-bg: #e2e8f0;
+            --btn-hover: #cbd5e1;
+            --input-bg: #ffffff;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s, color 0.3s; }
+        body { margin: 0; padding: 0; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
+        
+        .top-bar {
+            background: var(--card);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border);
+            height: 55px;
+        }
+
+        .wrapper { display: grid; grid-template-columns: 250px 1fr 350px; height: calc(100vh - 55px); }
+        aside { background: var(--card); padding: 20px; display: flex; flex-direction: column; gap: 10px; border-left: 1px solid var(--border); }
+        main { padding: 20px; overflow-y: auto; }
+        section { background: var(--card); padding: 20px; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
+        
+        .btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: var(--text); background: var(--btn-bg); font-size: 0.95rem; text-align: center; }
+        .btn:hover { background: var(--btn-hover); }
+        .btn.active { background: var(--primary); color: white; box-shadow: 0 0 12px rgba(144, 12, 63, 0.4); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { background: #16a34a; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-warning { background: #d97706; color: white; }
+        .btn-warning:hover { background: #b45309; }
+        .btn-admin { background: #0284c7; color: white; display: none; }
+        .btn-theme { background: #64748b; color: white; }
+        .btn-logout { background: #475569; color: white; }
+        
+        .bell-btn {
+            background: transparent;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            position: relative;
+            outline: none;
+        }
+        .bell-btn:hover { background: var(--btn-hover); }
+        .bell-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background: var(--danger);
+            border-radius: 50%;
+            display: none;
+        }
+
+        .live-clock {
+            background: var(--btn-bg);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
+        .card { background: var(--btn-bg); padding: 20px 10px; border-radius: 12px; text-align: center; cursor: pointer; border: 2px solid transparent; user-select: none; }
+        .card:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .card:active { transform: scale(0.95); }
+        .card span { display: block; font-size: 1.6rem; font-weight: bold; margin-bottom: 3px; color: var(--text); }
+
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-weight: bold; }
+        .cart-item span:last-child { color: var(--success); }
+        .delete-btn { color: var(--danger); cursor: pointer; margin-right: 10px; font-weight: bold; }
+        .item-checkbox { width: 18px; height: 18px; cursor: pointer; margin-left: 8px; accent-color: var(--primary); }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-box { background: var(--card); padding: 25px; border-radius: 15px; text-align: center; width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
+        .modal-box input, .modal-box select { width: 100%; padding: 10px; margin: 6px 0; border-radius: 8px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); text-align: center; font-size: 1rem; }
+
+        .settings-section { border: 1px dashed var(--border); padding: 10px; border-radius: 8px; margin-top: 10px; text-align: right; display: none; }
+        .settings-section h4 { margin: 0 0 8px 0; color: #38bdf8; text-align: center; }
+
+        .hold-bar { display: flex; gap: 6px; margin-bottom: 10px; }
+        .hold-btn { flex: 1; padding: 8px; font-size: 0.85rem; background: #0284c7; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .hold-btn:hover { background: #0369a1; }
+        .hold-badge { background: #d97706; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; margin-right: 5px; }
+
+        /* تنسيقات دوائر الكاشير للدخول السريع */
+        .avatar-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--btn-bg);
+            border: 2px solid #38bdf8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 6px auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s, border-color 0.2s, background 0.2s;
+        }
+        .avatar-card:hover .avatar-circle {
+            transform: scale(1.08);
+            border-color: var(--success);
+            background: var(--primary);
+        }
+
+        #printBox { display: none; }
+        @media print {
+            @page { margin: 0; size: 70mm auto; }
+            #loginOverlay, #floatOverlay, #adminOverlay, #settingsOverlay, #reportsOverlay, .top-bar, .wrapper { display: none !important; }
+            body { background: white; margin: 0; padding: 0; color: black; zoom: 1 !important; }
+            
+            #printBox {
+                display: block !important;
+                width: 66mm;
+                margin: 0 auto;
+                padding: 4mm 2mm;
+                color: black;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 12px;
+                line-height: 1.4;
+                direction: rtl;
+            }
+            .receipt-header { text-align: center; margin-bottom: 10px; border-bottom: 1px dashed black; padding-bottom: 8px; }
+            .receipt-header h2 { margin: 0; font-size: 20px; font-weight: bold; }
+            .receipt-header p { margin: 2px 0; font-size: 11px; }
+            .receipt-items { margin: 8px 0; border-bottom: 1px dashed black; padding-bottom: 6px; }
+            .receipt-item { display: flex; justify-content: space-between; margin-bottom: 3px; }
+            .receipt-totals { margin-top: 8px; font-weight: bold; }
+            .grand-total { font-size: 15px; border-top: 1px solid black; padding-top: 4px; margin-top: 4px; }
+            .receipt-footer { text-align: center; margin-top: 12px; font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. شاشة تسجيل الدخول -->
+    <div id="loginOverlay" class="modal-overlay">
+        <div class="modal-box">
+            <h2 id="loginTitle" style="margin-top:0;">دار الحجاب - فينيسيا</h2>
+            
+            <!-- قسم دوائر الدخول السريع للموظفين -->
+            <p style="font-size:0.85rem; color:#38bdf8; font-weight:bold; margin: 10px 0 5px 0;">اختر حسابك للدخول السريع (الكاشير):</p>
+            <div id="quickUsersContainer" style="display:flex; justify-content:center; gap:20px; margin: 15px 0; flex-wrap:wrap; min-height: 80px; align-items:center;">
+            </div>
+
+            <hr style="border: 0; border-top: 1px dashed var(--border); margin: 15px 0;">
+
+            <!-- قسم دخول الأدمن / الدخول التقليدي -->
+            <p style="font-size:0.8rem; color:var(--text); opacity:0.7; margin-bottom:6px;">دخول الأدمن / حساب بكلمة سر:</p>
+            <input type="text" id="username" placeholder="اسم المستخدم" autocomplete="off">
+            <input type="password" id="password" placeholder="كلمة المرور">
+            <button class="btn btn-success" style="width:100%; margin-top:10px;" onclick="checkLogin()">دخول المنظومة</button>
+            <div style="font-size: 0.8rem; color: #38bdf8; font-weight: bold; margin-top: 15px; letter-spacing: 1px;">
+                POWERED BY Mohamed ALGHARYANI
+                <div style="font-size: 0.75rem; color: var(--text); opacity: 0.7; font-weight: normal; margin-top: 4px;">Version 1.1</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. شاشة الرصيد الافتتاحي -->
+    <div id="floatOverlay" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <h2>بداية الوردية</h2>
+            <p style="color:var(--text); opacity:0.8;">أدخل المبلغ النقدي الافتتاحي في الخزينة:</p>
+            <input type="number" id="openingBalanceInput" placeholder="0.00" step="any">
+            <button class="btn btn-success" style="width:100%; margin-top:10px;" onclick="startShift()">تأكيد وبدء العمل</button>
+        </div>
+    </div>
+
+    <!-- 3. لوحة إدارة المستخدمين -->
+    <div id="adminOverlay" class="modal-overlay" style="display:none;">
+        <div class="modal-box" style="width: 420px;">
+            <h2 style="margin-top: 0;">إدارة المستخدمين 👥</h2>
+            <div id="userCountDisplay" style="margin-bottom: 10px; font-weight: bold; color: var(--success);">
+                إجمالي المستخدمين: 0
+            </div>
+
+            <div style="border: 1px solid var(--border); padding: 10px; border-radius: 8px; margin-bottom: 12px; background: var(--input-bg);">
+                <h4 style="margin: 0 0 8px 0; color: #38bdf8;">إضافة / تعديل كاشير</h4>
+                <input type="text" id="newUsername" placeholder="اسم الكاشير (مثلاً: محمد / صلاح)">
+                <input type="password" id="newPassword" placeholder="كلمة المرور (اختياري للبيع السريع)">
+                <button class="btn btn-success" style="width:100%; margin-top:8px;" onclick="saveUser()">حفظ البيانات</button>
+            </div>
+
+            <h4 style="margin: 5px 0; text-align: right; color: var(--text);">قائمة المستخدمين المضافين:</h4>
+            <div id="usersListContainer" style="max-height: 180px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 5px; margin-bottom: 10px; text-align: right;">
+            </div>
+
+            <button class="btn btn-danger" style="width:100%; margin-top:4px;" onclick="document.getElementById('adminOverlay').style.display='none'">إغلاق النافذة</button>
+        </div>
+    </div>
+
+    <!-- 4. نافذة الإعدادات -->
+    <div id="settingsOverlay" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <h2 style="margin-top:0;">الإعدادات ⚙️</h2>
+
+            <div id="adminInvoiceSettingsSection" class="settings-section">
+                <h4>📝 إعدادات الفاتورة والطباعة (أدمن)</h4>
+                <label style="font-size:0.85rem;">اسم المحل / الفرع:</label>
+                <input type="text" id="settingStoreName" placeholder="دار الحجاب - فينيسيا">
+
+                <button class="btn btn-success" style="width:100%; margin-top:6px; padding:8px;" onclick="saveInvoiceSettings()">💾 حفظ الإعدادات</button>
+            </div>
+
+            <button class="btn btn-warning" style="width:100%; margin-top:8px;" onclick="toggleReturnMode()">
+                🔄 <span id="returnModeText">تفعيل وضع الاسترجاع</span>
+            </button>
+            <button class="btn" style="width:100%; margin-top:8px; background: #0284c7; color:white;" onclick="checkoutQuote()">
+                📄 إنشاء فاتورة عرض أسعار
+            </button>
+            
+            <button class="btn btn-warning" style="width:100%; margin-top:8px;" onclick="addExpenseFromSettings()">
+                ➖ إضافة مصاريف
+            </button>
+
+            <button class="btn" style="width:100%; margin-top:8px; background: #8b5cf6; color:white;" onclick="document.getElementById('csvFileInput').click()">
+                📂 استيراد أصناف العطور (CSV / Excel)
+            </button>
+            <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="importProductsCSV(this)">
+
+            <button class="btn btn-danger" style="width:100%; margin-top:8px;" onclick="closeShiftFromSettings()">
+                🔒 إغلاق الكاشير (Z-Report)
+            </button>
+
+            <div id="adminPriceSection" style="display:none; margin-top:8px;">
+                <button class="btn btn-success" style="width:100%;" onclick="addNewPrice()">
+                    ➕ إضافة سعر جديد لشجرة المبيعات
+                </button>
+            </div>
+
+            <button class="btn btn-logout" style="width:100%; margin-top:15px; background:#ef4444;" onclick="logout()">
+                🚪 تسجيل الخروج
+            </button>
+            <button class="btn" style="width:100%; margin-top:8px; background:#475569;" onclick="closeSettings()">إغلاق النافذة</button>
+        </div>
+    </div>
+
+    <!-- 5. نافذة التقارير الحالية -->
+    <div id="reportsOverlay" class="modal-overlay" style="display:none;">
+        <div class="modal-box" style="width: 420px; text-align: right;">
+            <h2 style="margin-top:0; text-align:center; color:#38bdf8;">📊 تقرير حركة الوردية الحالية</h2>
+            <div id="liveReportContent" style="font-size: 0.95rem; line-height: 1.6; margin-top: 10px;">
+            </div>
+            <button class="btn" style="width:100%; margin-top:15px; background:#475569;" onclick="closeLiveReportModal()">إغلاق النافذة</button>
+        </div>
+    </div>
+
+    <!-- 6. الواجهة الرئيسية -->
+    <div id="app" style="display:none;">
+        <div class="top-bar">
+            <div style="font-weight: bold; font-size: 1.1rem; color: var(--success);">
+                👤 الكاشير: <span id="displayUsername">-</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="live-clock">
+                    🕒 <span id="clockTime">00:00:00</span>
+                </div>
+                <button class="bell-btn" id="updateBellBtn" onclick="checkSystemUpdates(true)" title="فحص التحديثات السحابية">
+                    🔔
+                    <span class="bell-badge" id="updateBadge"></span>
+                </button>
+                <button class="btn btn-theme" style="padding: 8px 15px;" onclick="openSettings()">⚙️ الإعدادات</button>
+            </div>
+        </div>
+
+        <div class="wrapper">
+            <aside>
+                <h2 style="text-align:center; color: var(--primary); margin:0 0 10px 0;">شجرة المبيعات</h2>
+                <button class="btn btn-theme" onclick="toggleTheme()">🌗 تبديل أبيض / أسود</button>
+                <button class="btn btn-admin" id="adminBtn" onclick="openAdminModal()">⚙️ إدارة المستخدمين</button>
+                <button class="btn service-btn active" onclick="setService(this, 'نقدي')">نقدي (Cash)</button>
+                <button class="btn service-btn" onclick="setService(this, 'موبي كاش')">موبي كاش</button>
+                <button class="btn service-btn" onclick="setService(this, 'ادفع لي')">ادفع لي</button>
+                <button class="btn service-btn" onclick="setService(this, 'يسر')">يسر</button>
+                <button class="btn service-btn" onclick="setService(this, 'البطاقة المصرفية')">البطاقة المصرفية</button>
+                <button class="btn" style="background:#0284c7; color:white; margin-top:10px;" onclick="openLiveReportModal()">📊 التقارير الحالية</button>
+            </aside>
+
+            <main>
+                <div class="grid" id="grid"></div>
+            </main>
+
+            <section>
+                <h3 style="margin:0 0 8px 0; border-bottom: 2px solid var(--border); padding-bottom:8px;">
+                    الفاتورة | الدفع: <span id="currentServiceDisplay" style="color:var(--success)">نقدي</span>
+                    <span id="returnBadge" style="display:none; color:var(--danger); font-size:0.85rem; margin-right:5px;">[وضع استرجاع - نقدي]</span>
+                </h3>
+
+                <div class="hold-bar">
+                    <button class="hold-btn" onclick="holdCurrentBill()">⏸️ تجميد الفاتورة</button>
+                    <button class="hold-btn" style="background:#059669;" onclick="restoreHeldBill()">
+                        ▶️ استرجاع المؤقتة <span id="holdBadge" class="hold-badge" style="display:none;">1</span>
+                    </button>
+                </div>
+
+                <div id="cartList" style="flex-grow:1; overflow-y:auto;"></div>
+                <div style="border-top: 2px solid var(--border); padding-top:12px; margin-top:8px;">
+                    <div style="display:flex; justify-content:space-between; font-size:1.3rem; font-weight:bold; margin-bottom:12px;">
+                        <span>الإجمالي:</span>
+                        <span style="color:var(--success)"><span id="total">0.00</span> د.ل</span>
+                    </div>
+                    <button class="btn btn-success" style="width:100%; font-size:1.1rem; padding:14px;" onclick="checkout()">🖨️ إتمام الدفع والطباعة الفورية</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div id="printBox"></div>
+
+    <script>
+        // دالة تحجيم الشاشة التلقائي حسب دقة الشاشة وتكبير الويندوز
+        function autoFitScreen() {
+            let baseWidth = 1366; // العرض الافتراضي القياسي للمنظومة
+            let currentWidth = window.innerWidth;
+            if (currentWidth < baseWidth) {
+                let scale = currentWidth / baseWidth;
+                document.body.style.zoom = scale;
+            } else {
+                document.body.style.zoom = "1";
+            }
+        }
+        window.addEventListener('resize', autoFitScreen);
+
+        const CURRENT_VERSION = "1.1";
+        const UPDATE_CHECK_URL = "https://gist.githubusercontent.com/mohammd01/7f45992495a08ecc5d76c48ac65781de/raw/version.txt";
+        const GDRIVE_VIEW_URL = "https://drive.google.com/uc?export=download&id=19mDybZ1eLxwCpRu-dgkBjEhkY9Uqmcvi";
+
+        function startLiveClock() {
+            setInterval(() => {
+                let now = new Date();
+                let hours = ("0" + now.getHours()).slice(-2);
+                let minutes = ("0" + now.getMinutes()).slice(-2);
+                let seconds = ("0" + now.getSeconds()).slice(-2);
+                let clockEl = document.getElementById('clockTime');
+                if (clockEl) clockEl.innerText = `${hours}:${minutes}:${seconds}`;
+            }, 1000);
+        }
+        startLiveClock();
+
+        function safeGet(key, fallback) {
+            try {
+                let val = localStorage.getItem(key);
+                return val ? JSON.parse(val) : fallback;
+            } catch (e) { return fallback; }
+        }
+
+        function safeSet(key, value) {
+            try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+        }
+
+        const DEFAULT_PRICES = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100];
+
+        if (safeGet('dh_theme', 'dark') === 'light') document.body.classList.add('light-mode');
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            safeSet('dh_theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        }
+
+        let dbUsers = safeGet('dh_users', { 'admin': '3894' });
+        let savedState = safeGet('dh_active_state', null);
+        let savedPrices = safeGet('dh_prices', DEFAULT_PRICES);
+        let savedProducts = safeGet('dh_products', []);
+
+        let state = savedState || {
+            currentUser: '',
+            cart: [],
+            heldCart: null,
+            service: 'نقدي',
+            openingBalance: 0,
+            sales: { 'نقدي': 0, 'موبي كاش': 0, 'ادفع لي': 0, 'يسر': 0, 'البطاقة المصرفية': 0 },
+            perfumeSales: 0,
+            expenses: [],
+            invoiceNo: 1000,
+            prices: savedPrices,
+            products: savedProducts,
+            storeName: 'دار الحجاب - فينيسيا',
+            paperWidth: 70,
+            isShiftActive: false,
+            isReturnMode: false
+        };
+
+        state.paperWidth = 70;
+
+        if (state.perfumeSales === undefined) state.perfumeSales = 0;
+        if (!state.prices || state.prices.length === 0) state.prices = DEFAULT_PRICES;
+        if (!state.products) state.products = [];
+        if (!state.storeName) state.storeName = 'دار الحجاب - فينيسيا';
+
+        function applyPrintWidth() {
+            let styleTag = document.getElementById('dynamicPrintStyle');
+            if (!styleTag) {
+                styleTag = document.createElement('style');
+                styleTag.id = 'dynamicPrintStyle';
+                document.head.appendChild(styleTag);
+            }
+            styleTag.innerHTML = `
+                @media print {
+                    @page { size: 70mm auto; margin: 0; }
+                    #printBox { width: 66mm !important; }
+                }
+            `;
+        }
+        applyPrintWidth();
+
+        function saveState() {
+            safeSet('dh_active_state', state);
+            safeSet('dh_prices', state.prices);
+            safeSet('dh_products', state.products);
+        }
+
+        // رسم دوائر الكاشير للدخول السريع
+        function renderQuickAvatars() {
+            let container = document.getElementById('quickUsersContainer');
+            if (!container) return;
+            
+            let usersKeys = Object.keys(dbUsers).filter(u => u !== 'admin');
+            
+            if (usersKeys.length === 0) {
+                container.innerHTML = '<span style="font-size:0.85rem; opacity:0.6;">لا يوجد حسابات كاشير مضافة حالياً</span>';
+                return;
+            }
+
+            let html = '';
+            usersKeys.forEach(u => {
+                html += `
+                    <div class="avatar-card" onclick="quickLogin('${u}')" style="cursor:pointer; text-align:center;">
+                        <div class="avatar-circle">👤</div>
+                        <span style="font-weight:bold; font-size:0.95rem; color:var(--text); display:block;">${u}</span>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // الدخول السريع فور الضغط على الدائرة
+        function quickLogin(username) {
+            state.currentUser = username;
+            document.getElementById('displayUsername').innerText = username;
+            saveState();
+
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('floatOverlay').style.display = 'flex';
+
+            // الكاشير لا يملك صلاحيات الأدمن
+            document.getElementById('adminBtn').style.display = 'none';
+            document.getElementById('adminPriceSection').style.display = 'none';
+            initGrid();
+        }
+
+        function isNewerVersion(remote, current) {
+            let r = remote.split('.').map(Number);
+            let c = current.split('.').map(Number);
+            for (let i = 0; i < Math.max(r.length, c.length); i++) {
+                let rNum = r[i] || 0;
+                let cNum = c[i] || 0;
+                if (rNum > cNum) return true;
+                if (rNum < cNum) return false;
+            }
+            return false;
+        }
+
+        function checkSystemUpdates(manualClick = false) {
+            if (!UPDATE_CHECK_URL || UPDATE_CHECK_URL.includes("YOUR_GIST_HASH")) {
+                if (manualClick) alert("يرجى استبدال رابط UPDATE_CHECK_URL برابط الـ Raw الخاص بك أولاً.");
+                return;
+            }
+
+            fetch(UPDATE_CHECK_URL + "?t=" + new Date().getTime(), { cache: "no-store" })
+                .then(response => response.text())
+                .then(remoteVersion => {
+                    remoteVersion = remoteVersion.trim();
+                    if (isNewerVersion(remoteVersion, CURRENT_VERSION)) {
+                        document.getElementById('updateBadge').style.display = 'block';
+                        if (confirm(`🔔 تنبيه سحابي: يتوفر إصدار جديد (${remoteVersion}) للمنظومة!\nإصدارك الحالي: (${CURRENT_VERSION})\n\nهل تريد تنزيل التحديث الآن؟`)) {
+                            if (window.chrome && window.chrome.webview) {
+                                window.chrome.webview.postMessage(JSON.stringify({
+                                    action: "update_app",
+                                    url: GDRIVE_VIEW_URL
+                                }));
+                            } else {
+                                window.open(GDRIVE_VIEW_URL, '_blank');
+                            }
+                        }
+                    } else {
+                        document.getElementById('updateBadge').style.display = 'none';
+                        if (manualClick) {
+                            alert(`أنت الآن تعمل على أحدث نسخة متوفرة بالفعل! ✅\n(إصدار المنظومة الحالية: ${CURRENT_VERSION})`);
+                        }
+                    }
+                })
+                .catch(err => {
+                    if (manualClick) {
+                        alert("تعذر الاتصال برابط التحديث، تأكد من صحة الرابط المنسوخ ومن الاتصال بالإنترنت.");
+                    }
+                });
+        }
+
+        function checkLogin() {
+            let u = document.getElementById('username').value.trim();
+            let p = document.getElementById('password').value.trim();
+
+            if (dbUsers[u] && (dbUsers[u] === p || p === "")) {
+                state.currentUser = u;
+                document.getElementById('displayUsername').innerText = u;
+                saveState();
+
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('floatOverlay').style.display = 'flex';
+
+                if (u === 'admin') {
+                    document.getElementById('adminBtn').style.display = 'block';
+                    document.getElementById('adminPriceSection').style.display = 'block';
+                } else {
+                    document.getElementById('adminBtn').style.display = 'none';
+                    document.getElementById('adminPriceSection').style.display = 'none';
+                }
+                initGrid();
+            } else {
+                alert("بيانات الدخول غير صحيحة!");
+            }
+        }
+
+        function logout() {
+            try { localStorage.removeItem('dh_active_state'); } catch(e){}
+            document.getElementById('app').style.display = 'none';
+            document.getElementById('floatOverlay').style.display = 'none';
+            document.getElementById('adminOverlay').style.display = 'none';
+            document.getElementById('settingsOverlay').style.display = 'none';
+            document.getElementById('reportsOverlay').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('adminBtn').style.display = 'none';
+            document.getElementById('loginOverlay').style.display = 'flex';
+
+            state.currentUser = '';
+            state.cart = [];
+            state.heldCart = null;
+            state.openingBalance = 0;
+            state.sales = { 'نقدي': 0, 'موبي كاش': 0, 'ادفع لي': 0, 'يسر': 0, 'البطاقة المصرفية': 0 };
+            state.perfumeSales = 0;
+            state.expenses = [];
+            state.isShiftActive = false;
+            state.isReturnMode = false;
+
+            renderQuickAvatars();
+        }
+
+        function startShift() {
+            let val = parseFloat(document.getElementById('openingBalanceInput').value);
+            state.openingBalance = isNaN(val) ? 0 : val;
+            state.isShiftActive = true;
+            saveState();
+
+            document.getElementById('floatOverlay').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            initGrid();
+            
+            checkSystemUpdates(false);
+        }
+
+        function openAdminModal() {
+            renderUsersList();
+            document.getElementById('adminOverlay').style.display = 'flex';
+        }
+
+        function renderUsersList() {
+            let container = document.getElementById('usersListContainer');
+            let countDisplay = document.getElementById('userCountDisplay');
+            if (!container || !countDisplay) return;
+
+            let usersKeys = Object.keys(dbUsers);
+            countDisplay.innerText = `إجمالي المستخدمين المضافين: ${usersKeys.length}`;
+
+            let html = '';
+            usersKeys.forEach(u => {
+                let isAdmin = (u === 'admin');
+                html += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding: 6px 4px; border-bottom: 1px solid var(--border);">
+                        <div>
+                            <strong>👤 ${u}</strong> ${isAdmin ? '<span style="color:#38bdf8; font-size:0.8rem;">(آدمن)</span>' : ''}
+                        </div>
+                        <div>
+                            <button class="btn btn-warning" style="padding: 4px 8px; font-size: 0.8rem; margin-left: 4px;" onclick="editUserPassword('${u}')">🔑 كلمة السر</button>
+                            ${!isAdmin ? `<button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.8rem;" onclick="deleteUser('${u}')">🗑️ حذف</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function saveUser() {
+            let nu = document.getElementById('newUsername').value.trim();
+            let np = document.getElementById('newPassword').value.trim();
+            if (nu) {
+                dbUsers[nu] = np || ""; // قبول اسم المستخدم حتى بدون كلمة مرور
+                safeSet('dh_users', dbUsers);
+                alert(`تم حفظ/تحديث الكاشير (${nu}) بنجاح.`);
+                document.getElementById('newUsername').value = '';
+                document.getElementById('newPassword').value = '';
+                renderUsersList();
+                renderQuickAvatars();
+            } else {
+                alert("الرجاء إدخال اسم الكاشير.");
+            }
+        }
+
+        function editUserPassword(username) {
+            let newPass = prompt(`أدخل كلمة المرور الجديدة للمستخدم (${username}):`);
+            if (newPass !== null) {
+                dbUsers[username] = newPass.trim();
+                safeSet('dh_users', dbUsers);
+                alert(`تم تغيير كلمة المرور للمستخدم (${username}) بنجاح.`);
+                renderUsersList();
+            }
+        }
+
+        function deleteUser(username) {
+            if (username === 'admin') return alert("لا يمكن حذف حساب الأدمن الرئيسي!");
+            if (confirm(`هل أنت تأكد من حذف المستخدم (${username}) نهائياً؟`)) {
+                delete dbUsers[username];
+                safeSet('dh_users', dbUsers);
+                alert(`تم حذف المستخدم (${username}) بنجاح.`);
+                renderUsersList();
+                renderQuickAvatars();
+            }
+        }
+
+        function initGrid() {
+            const grid = document.getElementById('grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            state.prices.forEach(p => {
+                grid.innerHTML += `<div class="card" onclick="addToCart(${p})"><span>${p}</span>دينار</div>`;
+            });
+            updateHoldBadge();
+        }
+
+        function importProductsCSV(input) {
+            let file = input.files[0];
+            if (!file) return;
+
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let text = e.target.result;
+                let lines = text.split(/\r\n|\n/);
+                let importedList = [];
+
+                lines.forEach((line, idx) => {
+                    if (!line.trim()) return;
+                    let cols = line.split(',');
+                    if (idx === 0 && (cols[0].includes('باركود') || cols[0].toLowerCase().includes('barcode'))) return;
+
+                    if (cols.length >= 3) {
+                        let barcode = cols[0].trim();
+                        let name = cols[1].trim();
+                        let price = parseFloat(cols[2].trim());
+
+                        if (barcode && name && !isNaN(price)) {
+                            importedList.push({ barcode: barcode, name: name, price: price });
+                        }
+                    }
+                });
+
+                if (importedList.length > 0) {
+                    state.products = importedList;
+                    saveState();
+                    alert(`نجح الاستيراد! تم حفظ (${importedList.length}) صنف عطور في المنظومة.`);
+                } else {
+                    alert("لم يتم العثور على بيانات صالحة! التأكد من أن الترتيب هو: باركود,اسم العطر,السعر");
+                }
+                input.value = '';
+                closeSettings();
+            };
+            reader.readAsText(file, 'UTF-8');
+        }
+
+        let barcodeBuffer = "";
+        let barcodeTimer;
+
+        document.addEventListener('keydown', function(e) {
+            if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+            if (e.key === 'Enter') {
+                if (barcodeBuffer.trim().length >= 3) {
+                    handleScannedBarcode(barcodeBuffer.trim());
+                    barcodeBuffer = "";
+                }
+            } else if (e.key.length === 1) {
+                barcodeBuffer += e.key;
+                clearTimeout(barcodeTimer);
+                barcodeTimer = setTimeout(() => { barcodeBuffer = ""; }, 250);
+            }
+        });
+
+        function handleScannedBarcode(code) {
+            let found = state.products.find(p => p.barcode === code);
+            if (found) {
+                addNamedProductToCart(found.name, found.price);
+            } else {
+                alert(`لم يتم العثور على صنف بالباركود: ${code}\nيرجى التأكد من رفع الأصناف في ملف الإكسل.`);
+            }
+        }
+
+        function addNamedProductToCart(name, price) {
+            let finalPrice = state.isReturnMode ? -Math.abs(price) : Math.abs(price);
+            let existing = state.cart.find(item => item.name === name && item.price === finalPrice);
+            if (existing) {
+                existing.qty++;
+            } else {
+                state.cart.push({ name: name, price: finalPrice, qty: 1 });
+            }
+            renderCart();
+            saveState();
+        }
+
+        function holdCurrentBill() {
+            if (state.cart.length === 0) return alert("السلة فارغة، لا يوجد ما يتم تجميده!");
+            state.heldCart = JSON.parse(JSON.stringify(state.cart));
+            state.cart = [];
+            renderCart();
+            saveState();
+            updateHoldBadge();
+            alert("تم تجميد الفاتورة الحالية بنجاح ⏸️.");
+        }
+
+        function restoreHeldBill() {
+            if (!state.heldCart || state.heldCart.length === 0) return alert("لا توجد فاتورة مجمدة حالياً!");
+            if (state.cart.length > 0) {
+                if (!confirm("توجد عناصر في السلة الحالية. هل تريد استبدالها بالفاتورة المجمدة؟")) return;
+            }
+            state.cart = JSON.parse(JSON.stringify(state.heldCart));
+            state.heldCart = null;
+            renderCart();
+            saveState();
+            updateHoldBadge();
+            alert("تم استرجاع الفاتورة المجمدة بنجاح ▶️.");
+        }
+
+        function updateHoldBadge() {
+            let badge = document.getElementById('holdBadge');
+            if (badge) {
+                badge.style.display = (state.heldCart && state.heldCart.length > 0) ? 'inline' : 'none';
+            }
+        }
+
+        function openSettings() { 
+            let adminSection = document.getElementById('adminInvoiceSettingsSection');
+            if (state.currentUser === 'admin') {
+                adminSection.style.display = 'block';
+                document.getElementById('settingStoreName').value = state.storeName || '';
+            } else {
+                adminSection.style.display = 'none';
+            }
+            document.getElementById('settingsOverlay').style.display = 'flex'; 
+        }
+
+        function closeSettings() { document.getElementById('settingsOverlay').style.display = 'none'; }
+
+        function openLiveReportModal() {
+            let totalCashSales = state.sales['نقدي'] || 0;
+            let totalExpensesSum = state.expenses.reduce((sum, e) => sum + (e.val || 0), 0);
+            let expectedCash = state.openingBalance + totalCashSales - totalExpensesSum;
+            let totalBankSales = (state.sales['موبي كاش'] || 0) + (state.sales['ادفع لي'] || 0) + (state.sales['يسر'] || 0) + (state.sales['البطاقة المصرفية'] || 0);
+            let perfumeSalesTotal = state.perfumeSales || 0;
+
+            let html = `
+                <div style="border: 1px solid var(--border); padding: 10px; border-radius: 8px; background: var(--input-bg); margin-bottom: 10px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>👤 الكاشير:</span> <strong>${state.currentUser}</strong></div>
+                    <div style="display:flex; justify-content:space-between;"><span>🕒 الوقت:</span> <strong>${getFormattedTime()}</strong></div>
+                </div>
+
+                <div style="border: 1px solid var(--border); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                    <h4 style="margin:0 0 8px 0; color:var(--success); border-bottom:1px dashed var(--border); padding-bottom:4px;">💵 النقدية والدرج</h4>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>الرصيد الافتتاحي:</span> <strong>${state.openingBalance.toFixed(2)} د.ل</strong></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>المبيعات النقدية:</span> <strong>${totalCashSales.toFixed(2)} د.ل</strong></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:var(--danger);"><span>إجمالي المصاريف:</span> <strong>-${totalExpensesSum.toFixed(2)} د.ل</strong></div>
+                    <div style="display:flex; justify-content:space-between; font-weight:bold; color:var(--success); border-top:1px solid var(--border); padding-top:4px; margin-top:4px;"><span>النقدية المتوقعة في الدرج:</span> <span>${expectedCash.toFixed(2)} د.ل</span></div>
+                </div>
+
+                <div style="border: 1px solid var(--border); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                    <h4 style="margin:0 0 8px 0; color:#38bdf8; border-bottom:1px dashed var(--border); padding-bottom:4px;">💳 الخدمات المصرفية</h4>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span>موبي كاش:</span> <span>${(state.sales['موبي كاش'] || 0).toFixed(2)} د.ل</span></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span>ادفع لي:</span> <span>${(state.sales['ادفع لي'] || 0).toFixed(2)} د.ل</span></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span>يسر:</span> <span>${(state.sales['يسر'] || 0).toFixed(2)} د.ل</span></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span>بطاقة مصرفية:</span> <span>${(state.sales['البطاقة المصرفية'] || 0).toFixed(2)} د.ل</span></div>
+                    <div style="display:flex; justify-content:space-between; font-weight:bold; color:#38bdf8; border-top:1px solid var(--border); padding-top:4px; margin-top:4px;"><span>إجمالي المصرفي:</span> <span>${totalBankSales.toFixed(2)} د.ل</span></div>
+                </div>
+
+                <div style="border: 1px solid var(--border); padding: 10px; border-radius: 8px; margin-bottom: 10px; display:flex; justify-content:space-between; font-weight:bold;">
+                    <span>🌸 مبيعات العطور الفعلية:</span>
+                    <span style="color:#a855f7;">${perfumeSalesTotal.toFixed(2)} د.ل</span>
+                </div>
+            `;
+
+            document.getElementById('liveReportContent').innerHTML = html;
+            document.getElementById('reportsOverlay').style.display = 'flex';
+        }
+
+        function closeLiveReportModal() {
+            document.getElementById('reportsOverlay').style.display = 'none';
+        }
+
+        function saveInvoiceSettings() {
+            if (state.currentUser !== 'admin') return alert("صلاحية مخصصة للآدمن فقط.");
+            let nameInput = document.getElementById('settingStoreName').value.trim();
+
+            if (nameInput) state.storeName = nameInput;
+            state.paperWidth = 70;
+
+            applyPrintWidth();
+            saveState();
+            alert("تم حفظ إعدادات الفاتورة بنجاح 💾!");
+        }
+
+        function toggleReturnMode() {
+            if (!state.isReturnMode && state.service !== 'نقدي') {
+                alert("تنبيه: وضع الاسترجاع متاح للدفع النقدي فقط. تم تحويل طريقة الدفع تلقائياً إلى 'نقدي'.");
+                forceServiceCash();
+            }
+            state.isReturnMode = !state.isReturnMode;
+            document.getElementById('returnBadge').style.display = state.isReturnMode ? 'inline' : 'none';
+            document.getElementById('returnModeText').innerText = state.isReturnMode ? 'إلغاء وضع الاسترجاع' : 'تفعيل وضع الاسترجاع';
+            saveState();
+            closeSettings();
+        }
+
+        function forceServiceCash() {
+            document.querySelectorAll('.service-btn').forEach(b => {
+                if (b.innerText.includes('نقدي')) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+            state.service = 'نقدي';
+            document.getElementById('currentServiceDisplay').innerText = 'نقدي';
+        }
+
+        function setService(el, name) {
+            if (state.isReturnMode && name !== 'نقدي') {
+                alert("عذراً! لا يمكن استخدام الاسترجاع إلا مع الدفع النقدي فقط.");
+                return;
+            }
+            document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            state.service = name;
+            document.getElementById('currentServiceDisplay').innerText = name;
+            saveState();
+        }
+
+        function addNewPrice() {
+            let p = parseFloat(prompt("أدخل السعر الجديد بالدينار:"));
+            if (!isNaN(p) && p > 0) {
+                if (!state.prices.includes(p)) {
+                    state.prices.push(p);
+                    state.prices.sort((a, b) => a - b);
+                    saveState();
+                    initGrid();
+                    alert(`تمت إضافة الفئة السعرية (${p} د.ل) بنجاح.`);
+                } else {
+                    alert("هذا السعر موجود بالفعل!");
+                }
+            }
+            closeSettings();
+        }
+
+        function addToCart(price) {
+            let finalPrice = state.isReturnMode ? -Math.abs(price) : Math.abs(price);
+            let existing = state.cart.find(item => !item.name && item.price === finalPrice);
+            if (existing) {
+                existing.qty++;
+            } else {
+                state.cart.push({ price: finalPrice, qty: 1 });
+            }
+            renderCart();
+            saveState();
+        }
+
+        function removeFromCart(index) {
+            state.cart.splice(index, 1);
+            renderCart();
+            saveState();
+        }
+
+        function renderCart() {
+            let list = document.getElementById('cartList');
+            if (!list) return;
+            list.innerHTML = state.cart.map((item, index) => {
+                let displayName = item.name ? `${item.name}` : `فئة ${item.price}`;
+                return `
+                    <div class="cart-item">
+                        <div style="display:flex; align-items:center;">
+                            <input type="checkbox" class="item-checkbox">
+                            <span class="delete-btn" onclick="removeFromCart(${index})">✖</span>
+                            <span>${displayName} (x${item.qty})</span>
+                        </div>
+                        <span>${(item.price * item.qty).toFixed(2)} د.ل</span>
+                    </div>
+                `;
+            }).join('');
+
+            let total = state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            document.getElementById('total').innerText = total.toFixed(2);
+        }
+
+        function addExpenseFromSettings() {
+            closeSettings();
+            addExpense();
+        }
+
+        function closeShiftFromSettings() {
+            closeSettings();
+            closeShift();
+        }
+
+        function addExpense() {
+            let name = prompt("بيان المصروف:");
+            if (!name) return;
+            let val = parseFloat(prompt("قيمة المصروف بالدينار:"));
+            if (val > 0) {
+                state.expenses.push({ name: name, val: val });
+                saveState();
+                alert(`تم تسجيل المصروف (${name}) بقيمة ${val} د.ل وخصمه من النقدية.`);
+            }
+        }
+
+        function getFormattedTime() {
+            let now = new Date();
+            return now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear() + " " + ("0" + now.getHours()).slice(-2) + ":" + ("0" + now.getMinutes()).slice(-2);
+        }
+
+        function checkout() {
+            if (state.cart.length === 0) return alert("الفاتورة فارغة!");
+
+            if (state.isReturnMode && state.service !== 'نقدي') {
+                alert("عذراً! عمليات الاسترجاع مسموحة فقط نقداً!");
+                forceServiceCash();
+                return;
+            }
+
+            let total = state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let perfumeTotal = state.cart.filter(item => item.name).reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            if (!state.isReturnMode) {
+                state.sales[state.service] = (state.sales[state.service] || 0) + total;
+                state.perfumeSales = (state.perfumeSales || 0) + perfumeTotal;
+            } else {
+                state.sales['نقدي'] = (state.sales['نقدي'] || 0) + total; 
+                state.perfumeSales = (state.perfumeSales || 0) + perfumeTotal;
+            }
+
+            state.invoiceNo++;
+            saveState();
+
+            let itemsHtml = state.cart.map(item => {
+                let itemName = item.name ? item.name : `${item.price.toFixed(2)} د.ل`;
+                return `
+                    <div class="receipt-item">
+                        <span>${item.qty}.00 pcs x ${itemName}</span>
+                        <span>${(item.price * item.qty).toFixed(2)}</span>
+                    </div>
+                `;
+            }).join('');
+
+            let storeNameDisplay = state.storeName || "دار الحجاب - فينيسيا";
+            let invoiceTitle = state.isReturnMode ? "فاتورة إرجاع بضاعة" : storeNameDisplay;
+
+            let printContent = `
+                <div class="receipt-header">
+                    <h2>DH</h2>
+                    <p>${invoiceTitle}</p>
+                    <p>Since 2001</p>
+                    <p style="font-size:10px; margin-top:4px;">البضاعة المباعة لا تسترجع والاستبدال خلال 24 ساعة</p>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <p>التاريخ: ${getFormattedTime()}</p>
+                    <p>رقم الفاتورة: CD${state.invoiceNo}-</p>
+                    <p>الكاشير: ${state.currentUser}</p>
+                </div>
+                <div class="receipt-items">
+                    ${itemsHtml}
+                </div>
+                <div class="receipt-totals">
+                    <div class="receipt-item"><span>Total:</span> <span>${total.toFixed(2)}</span></div>
+                    <div class="receipt-item grand-total"><span>Paid Amount:</span> <span>${total.toFixed(2)}</span></div>
+                    <div class="receipt-item"><span>Due Amount:</span> <span>0.00</span></div>
+                </div>
+                <div class="receipt-footer">
+                    <p>طريقة الدفع: ${state.service}</p>
+                    <p>*** شكراً لإختياركم ${storeNameDisplay} ***</p>
+                </div>
+            `;
+
+            document.getElementById('printBox').innerHTML = printContent;
+            applyPrintWidth();
+
+            if (window.chrome && window.chrome.webview) {
+                window.chrome.webview.postMessage("print_receipt");
+            } else {
+                window.print();
+            }
+
+            state.cart = [];
+            state.isReturnMode = false;
+            document.getElementById('returnBadge').style.display = 'none';
+            renderCart();
+            saveState();
+        }
+
+        function checkoutQuote() {
+            if (state.cart.length === 0) return alert("السلة فارغة لإنشاء عرض أسعار!");
+
+            let total = state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            let itemsHtml = state.cart.map(item => {
+                let itemName = item.name ? item.name : `${item.price.toFixed(2)} د.ل`;
+                return `
+                    <div class="receipt-item">
+                        <span>${item.qty}.00 pcs x ${itemName}</span>
+                        <span>${(item.price * item.qty).toFixed(2)}</span>
+                    </div>
+                `;
+            }).join('');
+
+            let storeNameDisplay = state.storeName || "دار الحجاب -   ";
+
+            let printContent = `
+                <div class="receipt-header">
+                    <h2>DH - عرض أسعار</h2>
+                    <p>${storeNameDisplay}</p>
+                    <p style="font-size:10px; margin-top:4px;">*** هذه الفاتورة للعرض فقط وليست فاتورة شراء ***</p>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <p>التاريخ: ${getFormattedTime()}</p>
+                    <p>الموظف: ${state.currentUser}</p>
+                </div>
+                <div class="receipt-items">
+                    ${itemsHtml}
+                </div>
+                <div class="receipt-totals">
+                    <div class="receipt-item grand-total"><span>الإجمالي الإفتراضي:</span> <span>${total.toFixed(2)}</span></div>
+                </div>
+                <div class="receipt-footer">
+                    <p>*** ${storeNameDisplay} ترحب بكم ***</p>
+                </div>
+            `;
+
+            document.getElementById('printBox').innerHTML = printContent;
+            applyPrintWidth();
+
+            if (window.chrome && window.chrome.webview) {
+                window.chrome.webview.postMessage("print_receipt");
+            } else {
+                window.print();
+            }
+
+            closeSettings();
+        }
+
+        function closeShift() {
+            let totalCashSales = state.sales['نقدي'] || 0;
+            let totalExpensesSum = state.expenses.reduce((sum, e) => sum + (e.val || 0), 0);
+            let expectedCash = state.openingBalance + totalCashSales - totalExpensesSum;
+
+            let actualInput = prompt(`إغلاق الخزينة النقدي:\n- الرصيد الافتتاحي: ${state.openingBalance.toFixed(2)} د.ل\n- المبيعات النقدية: ${totalCashSales.toFixed(2)} د.ل\n- إجمالي المصاريف: ${totalExpensesSum.toFixed(2)} د.ل\n- النقدية المتوقعة في الدرج: ${expectedCash.toFixed(2)} د.ل\n\nأدخل المبلغ الفعلي الموجود في الخزينة الآن:`);
+
+            if (actualInput === null) return;
+
+            let actualCash = parseFloat(actualInput) || 0;
+            let diff = actualCash - expectedCash;
+            let diffText = diff >= 0 ? `+${diff.toFixed(2)} (فائض)` : `${diff.toFixed(2)} (عجز)`;
+
+            let expensesHtml = state.expenses.length > 0
+                ? state.expenses.map(e => `<div class="receipt-item"><span>- ${e.name}:</span> <span>${(e.val || 0).toFixed(2)}</span></div>`).join('')
+                : `<div class="receipt-item"><span>لا توجد مصاريف</span> <span>0.00</span></div>`;
+
+            let totalBankSales = (state.sales['موبي كاش'] || 0) + (state.sales['ادفع لي'] || 0) + (state.sales['يسر'] || 0) + (state.sales['البطاقة المصرفية'] || 0);
+            let perfumeSalesTotal = state.perfumeSales || 0;
+            let storeNameDisplay = state.storeName || "دار الحجاب -  ";
+
+            let printContent = `
+                <div class="receipt-header">
+                    <h2>DH Z-Report</h2>
+                    <p>تقرير إغلاق الكاشير النهائي - ${storeNameDisplay}</p>
+                    <p>التاريخ: ${getFormattedTime()}</p>
+                    <p>الكاشير: ${state.currentUser}</p>
+                </div>
+
+                <div class="receipt-items">
+                    <p style="font-weight:bold; margin:0 0 5px 0;">[ حركة النقدية ]</p>
+                    <div class="receipt-item"><span>الرصيد الافتتاحي:</span> <span>${state.openingBalance.toFixed(2)}</span></div>
+                    <div class="receipt-item"><span>المبيعات النقدية:</span> <span>${totalCashSales.toFixed(2)}</span></div>
+                </div>
+
+                <div class="receipt-items">
+                    <p style="font-weight:bold; margin:0 0 5px 0;">[ تفاصيل المصاريف ]</p>
+                    ${expensesHtml}
+                    <div class="receipt-item" style="border-top:1px dashed black; margin-top:4px; padding-top:4px; font-weight:bold;">
+                        <span>إجمالي المصاريف:</span> <span>-${totalExpensesSum.toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <div class="receipt-items">
+                    <p style="font-weight:bold; margin:0 0 5px 0;">[ الخدمات المصرفية ]</p>
+                    <div class="receipt-item"><span>موبي كاش:</span> <span>${(state.sales['موبي كاش'] || 0).toFixed(2)}</span></div>
+                    <div class="receipt-item"><span>ادفع لي:</span> <span>${(state.sales['ادفع لي'] || 0).toFixed(2)}</span></div>
+                    <div class="receipt-item"><span>يسر:</span> <span>${(state.sales['يسر'] || 0).toFixed(2)}</span></div>
+                    <div class="receipt-item"><span>بطاقة مصرفية:</span> <span>${(state.sales['البطاقة المصرفية'] || 0).toFixed(2)}</span></div>
+                    <div class="receipt-item" style="border-top:1px dashed black; margin-top:4px; padding-top:4px; font-weight:bold;">
+                        <span>إجمالي المصرفي:</span> <span>${totalBankSales.toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <div class="receipt-items">
+                    <p style="font-weight:bold; margin:0 0 5px 0;">[ مبيعات العطور ]</p>
+                    <div class="receipt-item" style="font-weight:bold;">
+                        <span>إجمالي مبيعات العطور:</span> <span>${perfumeSalesTotal.toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <div class="receipt-totals">
+                    <div class="receipt-item"><span>الصافي النقدي المتوقع:</span> <span>${expectedCash.toFixed(2)}</span></div>
+                    <div class="receipt-item"><span>الرصيد النقدي الفعلي:</span> <span>${actualCash.toFixed(2)}</span></div>
+                    <div class="receipt-item grand-total"><span>الفارق (عجز/فائض):</span> <span>${diffText}</span></div>
+                </div>
+
+                <div class="receipt-footer">
+                    <p>*** تم إغلاق الوردية وتصفير العدادات ***</p>
+                </div>
+            `;
+
+            document.getElementById('printBox').innerHTML = printContent;
+            applyPrintWidth();
+
+            if (window.chrome && window.chrome.webview) {
+                window.chrome.webview.postMessage("print_receipt");
+            } else {
+                window.print();
+            }
+
+            logout();
+        }
+
+        window.onload = function() {
+            autoFitScreen();
+            renderQuickAvatars();
+
+            if (state.isShiftActive && state.currentUser) {
+                document.getElementById('displayUsername').innerText = state.currentUser;
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('floatOverlay').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+
+                if (state.currentUser === 'admin') {
+                    document.getElementById('adminBtn').style.display = 'block';
+                    document.getElementById('adminPriceSection').style.display = 'block';
+                }
+                initGrid();
+                renderCart();
+            }
+        };
+
+        let passInput = document.getElementById('password');
+        if (passInput) {
+            passInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') checkLogin();
+            });
+        }
+    </script>
+</body>
+</html>
