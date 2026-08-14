@@ -1,1210 +1,248 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS System Pro - DH</title>
-    <style>
-        :root {
-            --primary: #900c3f;
-            --success: #22c55e;
-            --danger: #ef4444; 
-            --bg: #0f172a; 
-            --card: #1e293b; 
-            --text: #f8fafc;
-            --border: #334155;
-            --btn-bg: #334155;
-            --btn-hover: #475569;
-            --input-bg: #0f172a;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0d111b" />
+  <title>دار الحجاب | POS System Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    /* ================================================================
+       دار الحجاب POS System Pro — Standalone HTML Edition
+       Design: Executive Dark & Warm Accent
+       Edit CSS variables below to quickly customize the brand.
+    ================================================================== */
+    :root{--bg:#0d111b;--surface:#151b28;--surface2:#1a2232;--surface3:#202a3b;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.14);--text:#f5f1ea;--soft:#c7c3bd;--muted:#898d98;--muted2:#626876;--burgundy:#900c3f;--burgundy2:#c54274;--gold:#d5af72;--gold2:#f0d7a2;--green:#47c78c;--blue:#5e9fec;--orange:#e2a15a;--violet:#a98be6;--pink:#e38aa6;--danger:#f07179;--shadow:0 20px 60px rgba(0,0,0,.28);--ease:cubic-bezier(.23,1,.32,1)}
+    :root.light{--bg:#f6f3ef;--surface:#fffdfa;--surface2:#f6f1eb;--surface3:#eee5dc;--line:rgba(50,38,38,.1);--line2:rgba(50,38,38,.16);--text:#2d2024;--soft:#5f5055;--muted:#81767c;--muted2:#a59ba0;--shadow:0 20px 60px rgba(74,43,42,.13)}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Tajawal,"Segoe UI",Tahoma,sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{border:0;cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}input{color:var(--text);background:var(--surface2);border:1px solid var(--line2);border-radius:9px;padding:12px 14px;width:100%;outline:0}input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(213,175,114,.1)}
+    ::-webkit-scrollbar{width:7px;height:7px}::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:8px}
+    .hidden{display:none!important}.eyebrow{display:inline-flex;align-items:center;gap:6px;color:var(--gold);font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.icon-btn{display:grid;place-items:center;width:34px;height:34px;color:var(--soft);background:transparent;border:1px solid transparent;border-radius:8px;transition:.18s var(--ease)}.icon-btn:hover{color:var(--text);background:var(--surface3);border-color:var(--line)}.primary{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:0 18px;border-radius:10px;color:#fff9f5;background:linear-gradient(135deg,var(--burgundy2),var(--burgundy));box-shadow:0 10px 24px rgba(144,12,63,.28);font-size:13px;font-weight:800;transition:.18s var(--ease)}.primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(144,12,63,.36)}.full{width:100%}.outline{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 10px;color:var(--soft);background:transparent;border:1px solid var(--line2);border-radius:7px;font-size:10px;font-weight:700}.outline:hover{color:var(--gold2);border-color:rgba(213,175,114,.5);background:rgba(213,175,114,.06)}
 
-        body.light-mode {
-            --bg: #f1f5f9; 
-            --card: #ffffff; 
-            --text: #0f172a;
-            --border: #cbd5e1;
-            --btn-bg: #e2e8f0;
-            --btn-hover: #cbd5e1;
-            --input-bg: #ffffff;
-        }
+    /* Login */
+    .login{min-height:100vh;display:grid;grid-template-columns:1.18fr .82fr;background:var(--bg)}.login-visual{position:relative;min-height:100vh;overflow:hidden;background-position:center;background-size:cover;border-left:1px solid rgba(213,175,114,.16);isolation:isolate}.login-visual:after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 20% 18%,rgba(213,175,114,.16),transparent 28%),linear-gradient(180deg,rgba(9,11,17,.08),rgba(9,11,17,.78))}.visual-grid{position:absolute;inset:0;opacity:.07;background-image:radial-gradient(rgba(255,255,255,.16) 1px,transparent 1px);background-size:26px 26px}.quote{position:absolute;left:9%;bottom:15%;width:min(78%,530px);color:#f7efe7;text-align:right;animation:up .7s var(--ease) both}.quote h1{margin:18px 0 15px;font-size:clamp(43px,4.35vw,67px);line-height:1.04;letter-spacing:-.075em;text-shadow:0 12px 34px rgba(0,0,0,.28)}.quote h1 em{color:var(--gold2);font-style:normal}.quote p{max-width:370px;margin:0 0 0 auto;color:rgba(255,255,255,.75);font-size:14px;line-height:1.9}.quote-line{display:flex;align-items:center;gap:12px;margin-top:30px;color:var(--gold2);font-size:10px;letter-spacing:.12em}.quote-line span{width:42px;height:1px;background:var(--gold)}.visual-foot{position:absolute;left:6%;right:6%;bottom:30px;display:flex;justify-content:space-between;color:rgba(255,255,255,.48);font-size:10px;letter-spacing:.13em}.login-panel{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--surface);border-right:1px solid var(--line)}.login-inner{width:min(430px,80%);padding:52px 0;animation:up .65s .1s var(--ease) both}.brand{display:flex;align-items:center;gap:12px;margin-bottom:65px;padding-bottom:17px;border-bottom:1px solid var(--line)}.brand-mark,.small-mark{display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,rgba(144,12,63,.94),rgba(59,11,31,.95));border:1px solid rgba(213,175,114,.38);box-shadow:0 9px 22px rgba(144,12,63,.25)}.brand-mark{width:48px;height:48px;border-radius:12px}.small-mark{width:35px;height:35px;border-radius:10px}.brand img,.small-mark img{width:80%;height:80%;object-fit:contain}.brand strong,.top-brand strong{display:block;font-size:15px;font-weight:800}.brand small,.top-brand small{display:block;margin-top:3px;color:var(--muted);font-size:10px}.login-title h2{margin:14px 0 7px;font-size:34px;line-height:1.15;letter-spacing:-.06em}.login-title p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px;padding:4px;border-right:2px solid rgba(144,12,63,.42)}.quick{display:flex;min-height:104px;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:15px 8px 13px;color:var(--text);background:linear-gradient(145deg,var(--surface2),rgba(144,12,63,.05));border:1px solid var(--line);border-radius:12px;transition:.18s var(--ease)}.quick:hover{transform:translateY(-3px);border-color:rgba(213,175,114,.6);background:linear-gradient(145deg,var(--surface3),rgba(144,12,63,.16));box-shadow:0 12px 24px rgba(0,0,0,.15)}.avatar{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:rgba(144,12,63,.3);border:1px solid rgba(213,175,114,.48);color:var(--gold2);font-size:14px;font-weight:800}.quick b{font-size:12px}.quick small{color:var(--muted);font-size:10px}.divider{display:flex;align-items:center;gap:12px;margin:29px 0 18px;color:var(--muted2);font-size:10px}.divider:before,.divider:after{content:"";height:1px;flex:1;background:var(--line)}.field-stack{display:grid;gap:14px;margin-bottom:20px}.field-stack label,.field-label{display:flex;flex-direction:column;gap:7px;color:var(--soft);font-size:11px;font-weight:700}.password{position:relative}.password input{padding-left:40px}.password span{position:absolute;left:13px;top:50%;color:var(--muted);transform:translateY(-50%)}.note{margin:23px 0 0;color:var(--muted2);font-size:10px;line-height:1.8;text-align:center}
 
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s, color 0.3s; }
-        body { margin: 0; padding: 0; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
-        
-        .top-bar {
-            background: var(--card);
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--border);
-            height: 55px;
-        }
+    /* Main app */
+    .app{min-height:100vh;background:var(--bg)}.topbar{position:relative;height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(21,27,40,.9);border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}.topbar:before{content:"";position:absolute;top:0;right:0;left:0;height:2px;background:linear-gradient(90deg,transparent,var(--burgundy2),var(--gold),transparent)}.top-brand{display:flex;align-items:center;gap:10px;min-width:215px}.top-status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px}.dot{width:7px;height:7px;display:inline-block;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(71,199,140,.1)}.top-actions{display:flex;align-items:center;justify-content:flex-start;gap:9px;min-width:215px}.top-action{position:relative;display:grid;place-items:center;width:34px;height:34px;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:9px}.top-action:hover{color:var(--text);background:var(--surface2);border-color:var(--line)}.user-chip{display:flex;align-items:center;gap:8px;margin-right:3px;padding:3px 7px 3px 10px;color:var(--text);background:var(--surface2);border:1px solid var(--line);border-radius:22px;text-align:right}.user-chip small,.user-chip b{display:block}.user-chip b{font-size:11px}.user-chip small{margin-top:1px;color:var(--muted);font-size:9px}.user-avatar{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;color:#fff5ee;background:var(--burgundy);font-size:11px;font-weight:800}.workspace{display:grid;grid-template-columns:215px minmax(440px,1fr) 370px;min-height:calc(100vh - 110px)}.sidebar{display:flex;flex-direction:column;padding:27px 16px 18px;background:var(--surface);border-left:1px solid var(--line)}.kicker{padding:0 11px;color:var(--muted2);font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.nav,.payments{display:grid;gap:5px;margin-top:12px}.nav button,.payment{display:flex;align-items:center;gap:10px;min-height:40px;padding:0 11px;color:var(--muted);background:transparent;border-radius:8px;text-align:right;font-size:11px;transition:.18s}.nav button:hover,.payment:hover{color:var(--soft);background:var(--surface2);transform:translateX(-2px)}.nav button.active{color:var(--text);background:linear-gradient(90deg,rgba(144,12,63,.26),transparent);box-shadow:inset -2px 0 0 var(--burgundy2)}.nav button svg{width:17px}.live{margin-right:auto;color:var(--green);font-size:8px;font-weight:800}.sep{height:1px;margin:25px 9px 24px;background:var(--line)}.payment{min-height:44px}.payment.selected{color:var(--text);background:var(--surface2)}.payment-icon{display:grid;place-items:center;width:27px;height:27px;border-radius:8px}.green{color:var(--green);background:rgba(71,199,140,.12)}.blue{color:var(--blue);background:rgba(94,159,236,.12)}.orange{color:var(--orange);background:rgba(226,161,90,.12)}.violet{color:var(--violet);background:rgba(169,139,230,.12)}.pink{color:var(--pink);background:rgba(227,138,166,.12)}.check{margin-right:auto;color:var(--gold)}.spacer{flex:1;min-height:25px}.promo{position:relative;min-height:148px;margin:14px 5px 18px;padding:15px;overflow:hidden;background-size:cover;background-position:center;border-radius:10px}.promo strong{display:block;margin-top:22px;color:#fff5ee;font-size:18px;line-height:1.15}.promo small,.promo em{display:block;margin-top:9px;color:rgba(255,255,255,.58);font-size:10px;font-style:normal}.promo em{margin-top:0;color:var(--gold2);font-size:8px;letter-spacing:.16em}.logout{display:flex;align-items:center;gap:9px;padding:9px 11px;color:var(--muted);background:transparent;text-align:right;font-size:11px}.logout:hover{color:var(--danger)}.main{min-width:0;padding:34px 38px 38px;overflow:auto}.heading{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:28px}.heading h1{margin:10px 0 5px;font-size:33px;line-height:1.08;letter-spacing:-.07em}.heading p{margin:0;color:var(--muted);font-size:11px}.heading p span{padding:0 7px;color:var(--gold)}.metrics{display:flex;align-items:center;gap:19px}.metrics span,.metrics strong{display:block}.metrics span{color:var(--muted);font-size:9px}.metrics strong{margin-top:6px;font-size:16px}.metric-sep{width:1px;height:34px;background:var(--line2)}.banner{display:flex;align-items:center;gap:11px;min-height:52px;margin-bottom:18px;padding:9px 13px;border:1px solid rgba(213,175,114,.2);border-radius:10px;background:linear-gradient(90deg,rgba(213,175,114,.1),rgba(144,12,63,.12))}.banner-icon{display:grid;place-items:center;width:30px;height:30px;color:var(--gold);background:rgba(213,175,114,.12);border-radius:8px}.banner strong,.banner small{display:block}.banner strong{color:var(--gold2);font-size:11px}.banner small{margin-top:2px;color:var(--muted);font-size:10px}.banner button{display:inline-flex;align-items:center;gap:5px;margin-right:auto;padding:6px 9px;color:var(--gold2);background:rgba(213,175,114,.1);border-radius:6px;font-size:9px}.card{position:relative;padding:22px;border:1px solid var(--line);border-top:2px solid rgba(213,175,114,.32);border-radius:13px;background:linear-gradient(145deg,var(--surface),rgba(144,12,63,.025));box-shadow:0 10px 30px rgba(0,0,0,.16)}.card+.card{margin-top:16px}.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:20px}.section-head h2,.cart-head h2{margin:7px 0 0;font-size:19px;letter-spacing:-.04em}.tools{display:flex;align-items:center;gap:10px}.search{display:flex;align-items:center;gap:7px;width:155px;padding:0 10px;color:var(--muted);background:var(--surface2);border:1px solid var(--line);border-radius:7px}.search input{height:30px;padding:0;border:0;background:transparent;font-size:10px}.count{color:var(--muted2);font-size:9px}.price-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px}.price{position:relative;display:flex;min-height:88px;flex-direction:column;align-items:flex-start;justify-content:center;padding:12px;overflow:hidden;color:var(--text);background:linear-gradient(145deg,var(--surface2),rgba(255,255,255,.012));border:1px solid var(--line);border-radius:9px;text-align:right;transition:.18s var(--ease)}.price:before{content:"";position:absolute;inset:auto -18px -24px auto;width:75px;height:75px;border:1px solid rgba(213,175,114,.11);border-radius:50%}.price:hover{transform:translateY(-3px);border-color:rgba(213,175,114,.47);background:linear-gradient(145deg,var(--surface3),rgba(144,12,63,.16));box-shadow:0 10px 20px rgba(0,0,0,.15)}.price b{font-size:23px;letter-spacing:-.05em}.price small{margin-top:4px;color:var(--muted);font-size:9px}.price i{position:absolute;top:9px;left:9px;color:var(--muted2);font-style:normal}.products{margin-top:16px}.compact{align-items:center;margin-bottom:14px}.product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.product{display:flex;align-items:center;gap:8px;padding:9px;color:var(--text);background:var(--surface2);border:1px solid var(--line);border-radius:8px;text-align:right}.product:hover{border-color:rgba(213,175,114,.45)}.product b,.product small{display:block}.product b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}.product small{margin-top:3px;color:var(--muted);font-size:9px}.product .product-icon{display:grid;place-items:center;width:27px;height:27px;color:var(--gold);background:rgba(213,175,114,.1);border-radius:7px}.empty-products{display:flex;align-items:center;gap:8px;min-height:55px;padding:0 12px;color:var(--muted);background:var(--surface2);border-radius:8px;font-size:10px}
 
-        .wrapper { display: grid; grid-template-columns: 250px 1fr 350px; height: calc(100vh - 55px); }
-        aside { background: var(--card); padding: 20px; display: flex; flex-direction: column; gap: 10px; border-left: 1px solid var(--border); }
-        main { padding: 20px; overflow-y: auto; }
-        section { background: var(--card); padding: 20px; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
-        
-        .btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: var(--text); background: var(--btn-bg); font-size: 0.95rem; text-align: center; }
-        .btn:hover { background: var(--btn-hover); }
-        .btn.active { background: var(--primary); color: white; box-shadow: 0 0 12px rgba(144, 12, 63, 0.4); }
-        .btn-success { background: var(--success); color: white; }
-        .btn-success:hover { background: #16a34a; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-danger:hover { background: #dc2626; }
-        .btn-warning { background: #d97706; color: white; }
-        .btn-warning:hover { background: #b45309; }
-        .btn-admin { background: #0284c7; color: white; display: none; }
-        .btn-theme { background: #64748b; color: white; }
-        .btn-logout { background: #475569; color: white; }
-        
-        .bell-btn {
-            background: transparent;
-            border: 2px solid var(--border);
-            border-radius: 50%;
-            width: 38px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.1rem;
-            position: relative;
-            outline: none;
-        }
-        .bell-btn:hover { background: var(--btn-hover); }
-        .bell-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 12px;
-            height: 12px;
-            background: var(--danger);
-            border-radius: 50%;
-            display: none;
-        }
+    /* Cart */
+    .cart{display:flex;flex-direction:column;min-width:0;background:linear-gradient(180deg,var(--surface),rgba(144,12,63,.025));border-right:1px solid var(--line);box-shadow:-10px 0 35px rgba(0,0,0,.08)}.cart-head{display:flex;align-items:flex-end;justify-content:space-between;padding:30px 24px 18px;border-bottom:1px solid var(--line)}.cart-badge{padding:5px 8px;color:var(--gold2);background:rgba(213,175,114,.1);border:1px solid rgba(213,175,114,.17);border-radius:5px;font-size:9px}.cart-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:16px 24px 12px}.cart-controls button{display:flex;align-items:center;justify-content:center;gap:5px;min-height:31px;color:var(--muted);background:var(--surface2);border:1px solid var(--line);border-radius:6px;font-size:9px}.cart-controls button:hover{color:var(--soft);border-color:var(--line2)}.held{color:var(--gold)!important;border-color:rgba(213,175,114,.32)!important}.cart-list{flex:1;min-height:260px;max-height:calc(100vh - 370px);overflow-y:auto;padding:0 24px}.cart-line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 0;border-bottom:1px solid var(--line);animation:up .24s var(--ease) both}.line-leading{display:flex;align-items:center;gap:9px;min-width:0}.line-leading>div{min-width:0}.line-leading strong,.line-leading small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.line-leading strong{font-size:11px}.line-leading small{margin-top:4px;color:var(--muted);font-size:9px}.remove{display:grid;place-items:center;width:25px;height:25px;color:var(--muted2);background:transparent;border-radius:6px}.remove:hover{color:var(--danger);background:rgba(240,113,121,.09)}.line-total{color:var(--green);font-size:11px;font-weight:800;white-space:nowrap}.return-total{color:var(--danger)}.empty-cart{display:flex;min-height:250px;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);text-align:center}.empty-cart .empty-icon{display:grid;place-items:center;width:52px;height:52px;margin-bottom:13px;color:var(--gold);background:rgba(213,175,114,.08);border:1px dashed rgba(213,175,114,.28);border-radius:50%}.empty-cart strong{font-size:12px}.empty-cart small{max-width:180px;margin-top:7px;color:var(--muted2);font-size:10px;line-height:1.6}.summary{padding:20px 24px 19px;border-top:1px solid var(--line)}.summary-row{display:flex;justify-content:space-between;margin-bottom:9px;color:var(--soft);font-size:10px}.summary-row.muted{color:var(--muted)}.summary-total{display:flex;align-items:baseline;justify-content:space-between;padding:13px 0 16px;margin:8px 0 13px;border-top:1px dashed var(--line2);border-bottom:1px dashed var(--line2);font-size:11px}.summary-total strong{font-size:22px;letter-spacing:-.04em}.selected-pay{display:flex;align-items:center;gap:7px;margin-bottom:12px;color:var(--muted);font-size:9px}.selected-pay b{color:var(--soft)}.selected-pay .check{margin-right:auto}.checkout{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:49px;padding:0 15px;color:#fff7f0;background:linear-gradient(110deg,var(--burgundy2),var(--burgundy));border-radius:9px;box-shadow:0 10px 24px rgba(144,12,63,.28);font-size:12px;font-weight:800}.checkout:hover:not(:disabled){transform:translateY(-2px)}.checkout span{color:rgba(255,255,255,.74);font-size:10px}.cart-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:13px;margin-top:15px}.cart-actions button{display:inline-flex;align-items:center;gap:5px;color:var(--muted);background:transparent;font-size:9px}.cart-actions button:hover{color:var(--soft)}.footer{display:flex;align-items:center;justify-content:space-between;height:36px;padding:0 25px;color:var(--muted2);background:var(--surface);border-top:1px solid var(--line);font-size:9px}.footer span{display:flex;align-items:center;gap:7px}.footer i{color:var(--gold);font-style:normal}
 
-        .live-clock {
-            background: var(--btn-bg);
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
-        .card { background: var(--btn-bg); padding: 20px 10px; border-radius: 12px; text-align: center; cursor: pointer; border: 2px solid transparent; user-select: none; }
-        .card:hover { border-color: var(--primary); transform: translateY(-3px); }
-        .card:active { transform: scale(0.95); }
-        .card span { display: block; font-size: 1.6rem; font-weight: bold; margin-bottom: 3px; color: var(--text); }
+    /* Customer experience upgrade */
+    .customer-strip{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:13px 15px;background:linear-gradient(110deg,rgba(213,175,114,.10),rgba(144,12,63,.12));border:1px solid rgba(213,175,114,.22);border-radius:12px}
+    .customer-avatar{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border-radius:12px;color:var(--gold2);background:rgba(144,12,63,.28);border:1px solid rgba(213,175,114,.35);font-weight:800}
+    .customer-strip strong,.customer-strip small{display:block}.customer-strip strong{font-size:11px}.customer-strip small{margin-top:3px;color:var(--muted);font-size:9px}.customer-strip .customer-meta{min-width:0;flex:1}.customer-strip .customer-actions{display:flex;gap:7px;flex-wrap:wrap}.customer-strip .customer-actions button{min-height:31px;padding:0 10px;color:var(--soft);background:var(--surface2);border:1px solid var(--line);border-radius:7px;font-size:9px}.customer-strip .customer-actions button:hover{color:var(--gold2);border-color:rgba(213,175,114,.5)}
+    .customer-form{display:grid;gap:12px}.customer-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.customer-form .field-label{gap:6px}.customer-form textarea,.customer-form input{color:var(--text);background:var(--surface2);border:1px solid var(--line2);border-radius:9px;padding:12px 14px;width:100%;outline:0;resize:vertical}.customer-form textarea{min-height:78px}.customer-form textarea:focus,.customer-form input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(213,175,114,.1)}.customer-hint{display:flex;align-items:center;gap:8px;padding:10px 12px;color:var(--muted);background:rgba(71,199,140,.07);border:1px solid rgba(71,199,140,.18);border-radius:8px;font-size:10px;line-height:1.6}.customer-hint b{color:var(--green)}
+    .z-report-actions{display:flex;gap:10px;margin-top:18px}.z-report-actions .primary{flex:1}.report-kpi{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:12px 14px;color:var(--soft);background:var(--surface2);border:1px solid var(--line);border-radius:9px;font-size:10px}.report-kpi strong{color:var(--gold2);font-size:16px}
+    @media(max-width:720px){.customer-form-grid{grid-template-columns:1fr}.customer-strip{align-items:flex-start;flex-wrap:wrap}.customer-strip .customer-actions{width:100%}.customer-strip .customer-actions button{flex:1}}
 
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-weight: bold; }
-        .cart-item span:last-child { color: var(--success); }
-        .delete-btn { color: var(--danger); cursor: pointer; margin-right: 10px; font-weight: bold; }
-        .item-checkbox { width: 18px; height: 18px; cursor: pointer; margin-left: 8px; accent-color: var(--primary); }
+    /* Modal */
+    .backdrop{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:20px;background:rgba(3,5,10,.72);backdrop-filter:blur(10px);animation:fade .2s ease both}.modal{width:min(500px,100%);max-height:90vh;overflow:auto;padding:24px;background:var(--surface);border:1px solid var(--line2);border-radius:16px;box-shadow:var(--shadow);animation:modal .24s var(--ease) both}.modal.wide{width:min(650px,100%)}.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:21px}.modal-title{display:flex;align-items:center;gap:10px}.modal-title svg{color:var(--gold)}.modal-title h2{margin:0;font-size:20px;letter-spacing:-.04em}.intro{display:flex;align-items:center;gap:12px;padding:13px;margin-bottom:19px;color:var(--muted);background:var(--surface2);border:1px solid var(--line);border-radius:10px;font-size:11px;line-height:1.7}.intro p{margin:0}.disc{display:grid;place-items:center;width:40px;height:40px;color:var(--gold2);background:rgba(144,12,63,.25);border-radius:11px}.settings{display:grid;gap:9px}.setting{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px;background:var(--surface2);border:1px solid var(--line);border-radius:10px}.setting strong,.setting small{display:block}.setting strong{font-size:11px}.setting small{margin-top:4px;color:var(--muted);font-size:9px}.switch{position:relative;width:39px;height:21px;padding:3px;background:var(--surface3);border-radius:15px}.switch span{display:block;width:15px;height:15px;border-radius:50%;background:var(--muted);transition:.2s var(--ease)}.switch.on{background:var(--burgundy)}.switch.on span{background:#fff;transform:translateX(-18px)}.inline{display:flex;gap:5px}.inline button{min-width:32px;height:30px;color:var(--gold);background:rgba(213,175,114,.1);border-radius:6px;font-size:10px}.inline button.active{color:#fff;background:var(--burgundy)}.setting-action{display:flex;align-items:center;gap:12px;padding:13px;color:var(--soft);background:var(--surface2);border:1px solid var(--line);border-radius:10px;text-align:right}.setting-action:hover{border-color:rgba(213,175,114,.4);background:var(--surface3)}.setting-action svg:first-child{color:var(--gold)}.setting-action span{flex:1}.setting-action b,.setting-action small{display:block}.setting-action b{font-size:11px}.setting-action small{margin-top:4px;color:var(--muted);font-size:9px}.danger b,.danger svg:first-child{color:var(--danger)}.report-hero{display:flex;align-items:stretch;justify-content:space-between;min-height:112px;overflow:hidden;margin-bottom:14px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(105deg,rgba(144,12,63,.22),var(--surface2))}.report-hero>div:first-child{display:flex;flex-direction:column;justify-content:center;padding:18px}.report-hero strong{margin-top:8px;font-size:28px}.report-hero small{margin-top:4px;color:var(--muted);font-size:10px}.report-art{display:grid;place-items:center;width:145px;color:var(--gold2);background-position:center;background-size:cover}.report-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.report-grid>div{padding:14px;background:var(--surface2);border:1px solid var(--line);border-radius:9px}.report-grid span,.report-grid strong,.report-grid small{display:block}.report-grid span{color:var(--muted);font-size:9px}.report-grid strong{margin-top:7px;font-size:17px}.report-grid small{margin-top:4px;color:var(--muted2);font-size:9px}.report-details{display:flex;margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:9px}.report-details>div{flex:1;padding:0 12px;border-left:1px solid var(--line)}.report-details>div:last-child{border-left:0}.report-details span,.report-details b{display:block}.report-details span{color:var(--muted);font-size:9px}.report-details b{margin-top:6px;font-size:10px}.user-list{border:1px solid var(--line);border-radius:10px;overflow:hidden}.user-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid var(--line)}.user-row:last-child{border-bottom:0}.user-info{display:flex;align-items:center;gap:9px}.user-info b,.user-info small{display:block}.user-info b{font-size:11px}.user-info small{margin-top:3px;color:var(--muted);font-size:9px}.row-actions{display:flex;gap:5px}.row-actions button{display:inline-flex;align-items:center;gap:4px;padding:7px 8px;color:var(--soft);background:var(--surface2);border-radius:6px;font-size:9px}.row-actions .danger{color:var(--danger)}
 
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .modal-box { background: var(--card); padding: 25px; border-radius: 15px; text-align: center; width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
-        .modal-box input, .modal-box select { width: 100%; padding: 10px; margin: 6px 0; border-radius: 8px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); text-align: center; font-size: 1rem; }
-
-        .settings-section { border: 1px dashed var(--border); padding: 10px; border-radius: 8px; margin-top: 10px; text-align: right; display: none; }
-        .settings-section h4 { margin: 0 0 8px 0; color: #38bdf8; text-align: center; }
-
-        .hold-bar { display: flex; gap: 6px; margin-bottom: 10px; }
-        .hold-btn { flex: 1; padding: 8px; font-size: 0.85rem; background: #0284c7; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .hold-btn:hover { background: #0369a1; }
-        .hold-badge { background: #d97706; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; margin-right: 5px; }
-
-        /* تنسيقات دوائر الكاشير للدخول السريع */
-        .avatar-circle {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: var(--btn-bg);
-            border: 2px solid #38bdf8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 6px auto;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: transform 0.2s, border-color 0.2s, background 0.2s;
-        }
-        .avatar-card:hover .avatar-circle {
-            transform: scale(1.08);
-            border-color: var(--success);
-            background: var(--primary);
-        }
-
-        #printBox { display: none; }
-        @media print {
-            @page { margin: 0; size: 70mm auto; }
-            #loginOverlay, #floatOverlay, #adminOverlay, #settingsOverlay, #reportsOverlay, .top-bar, .wrapper { display: none !important; }
-            body { background: white; margin: 0; padding: 0; color: black; zoom: 1 !important; }
-            
-            #printBox {
-                display: block !important;
-                width: 66mm;
-                margin: 0 auto;
-                padding: 4mm 2mm;
-                color: black;
-                font-family: 'Courier New', Courier, monospace;
-                font-size: 12px;
-                line-height: 1.4;
-                direction: rtl;
-            }
-            .receipt-header { text-align: center; margin-bottom: 10px; border-bottom: 1px dashed black; padding-bottom: 8px; }
-            .receipt-header h2 { margin: 0; font-size: 20px; font-weight: bold; }
-            .receipt-header p { margin: 2px 0; font-size: 11px; }
-            .receipt-items { margin: 8px 0; border-bottom: 1px dashed black; padding-bottom: 6px; }
-            .receipt-item { display: flex; justify-content: space-between; margin-bottom: 3px; }
-            .receipt-totals { margin-top: 8px; font-weight: bold; }
-            .grand-total { font-size: 15px; border-top: 1px solid black; padding-top: 4px; margin-top: 4px; }
-            .receipt-footer { text-align: center; margin-top: 12px; font-size: 11px; }
-        }
-    </style>
+    /* Receipt */
+    .receipt{display:none;direction:rtl;width:70mm;height:auto;min-height:70mm;padding:3mm 2.8mm 3mm;color:#111;background:#fff;font-family:Arial,"Courier New",monospace;font-size:11px;line-height:1.25;text-align:right;overflow:hidden}.receipt.r70{width:70mm;height:70mm;min-height:70mm}.receipt-brand,.receipt-sub,.receipt-thanks,.receipt-footer{text-align:center}.receipt-brand{font-size:17px;font-weight:800}.receipt-sub{font-size:10px}.rule{height:1px;margin:8px 0;border-top:1px dashed #111}.receipt-meta,.receipt-item,.receipt-total{display:flex;justify-content:space-between;gap:8px}.receipt-meta{margin:3px 0}.receipt-items{display:grid;gap:6px}.receipt-item>div{min-width:0}.receipt-item b,.receipt-item span{display:block}.receipt-item b{overflow-wrap:anywhere}.receipt-item span{color:#333;font-size:9px}.receipt-item strong{white-space:nowrap}.receipt-total{align-items:baseline;font-size:14px;font-weight:800}.receipt-total strong{font-size:18px}.receipt-thanks{margin:10px 0 5px;font-size:11px}.receipt-footer{font-size:9px}
+    @media print{ @page{size:80mm auto;margin:0} html,body{background:#fff!important;margin:0!important} body *{visibility:hidden!important}.receipt,.receipt *{visibility:visible!important}.receipt{position:absolute;top:0;right:0;display:block!important;min-height:1px;overflow:visible} }
+    .receipt.z-report-long{width:80mm;height:auto;min-height:0;padding:2.5mm 3mm;font-size:9px;line-height:1.28;overflow:visible}.z-report-long .zr-head{text-align:center;border-bottom:2px solid #111;padding-bottom:5px;margin-bottom:4px}.z-report-long .zr-brand{font-size:18px;font-weight:900;letter-spacing:.06em}.z-report-long .zr-title{margin:1px 0;font-size:14px;font-weight:900}.z-report-long .zr-sub{font-size:8px;color:#444}.z-report-long .zr-badge{display:inline-block;margin-top:3px;padding:2px 7px;color:#fff;background:#111;font-size:8px;font-weight:900}.z-report-long .zr-section{margin:4px 0;padding:3px 0;border-bottom:1px dashed #222}.z-report-long .zr-section-title{text-align:center;margin-bottom:2px;padding:2px 0;background:#f0f0f0;font-weight:900}.z-report-long .zr-row{display:flex;justify-content:space-between;gap:6px;margin:1px 0}.z-report-long .zr-row span:first-child{min-width:0}.z-report-long .zr-row strong,.z-report-long .zr-amount{white-space:nowrap}.z-report-long .zr-table{width:100%;border-collapse:collapse;font-size:8px}.z-report-long .zr-table th{padding:2px 1px;border-bottom:1px solid #111;text-align:right}.z-report-long .zr-table td{padding:2px 1px;border-bottom:1px dotted #999;vertical-align:top}.z-report-long .zr-total{margin-top:4px;padding:4px 0;border-top:2px solid #111;border-bottom:3px double #111;font-weight:900}.z-report-long .zr-grand{font-size:12px}.z-report-long .zr-footer{text-align:center;margin-top:5px;font-size:8px}.z-report-long .zr-muted{color:#555;font-size:8px}.z-report-long .zr-note{padding:4px;background:#f5f5f5;font-size:8px}@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes modal{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @media(max-width:1250px){.workspace{grid-template-columns:190px minmax(390px,1fr) 325px}.main{padding-inline:24px}.price-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.metrics{display:none}}
+    @media(max-width:980px){.workspace{grid-template-columns:180px minmax(0,1fr)}.cart{grid-column:1/-1;border-top:1px solid var(--line);border-right:0}.cart-list{max-height:300px}.cart-head,.cart-controls,.summary{max-width:520px;width:100%;margin-inline:auto}}
+    @media(max-width:720px){.login{display:block}.login-visual{display:none}.login-panel{min-height:100vh}.login-inner{width:min(430px,calc(100% - 38px));padding:35px 0}.brand{margin-bottom:50px}.topbar{height:62px;padding-inline:15px}.top-brand{min-width:0}.top-brand small,.top-status{display:none}.top-actions{min-width:0}.user-chip small{display:none}.workspace{display:block;min-height:auto}.sidebar{display:flex;flex-direction:row;align-items:center;gap:7px;padding:9px 13px;overflow-x:auto;border-left:0;border-bottom:1px solid var(--line)}.sidebar>.kicker,.sidebar>.sep,.sidebar>.spacer,.sidebar>.promo,.sidebar>.logout,.payments{display:none}.nav{display:flex;margin:0}.nav button:not(.active){display:none}.main{padding:25px 15px}.heading{display:block;margin-bottom:22px}.heading h1{font-size:26px}.section-head{align-items:flex-start;flex-direction:column}.tools,.search{width:100%}.price-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cart{min-height:520px}.footer{height:auto;min-height:38px;padding:8px 13px}.footer>span:last-child{display:none}.report-details{display:grid;gap:12px}.report-details>div{padding:0;border:0}.login-title h2{font-size:30px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
 </head>
 <body>
-
-    <!-- 1. شاشة تسجيل الدخول -->
-    <div id="loginOverlay" class="modal-overlay">
-        <div class="modal-box">
-            <h2 id="loginTitle" style="margin-top:0;">دار الحجاب - فينيسيا</h2>
-            
-            <!-- قسم دوائر الدخول السريع للموظفين -->
-            <p style="font-size:0.85rem; color:#38bdf8; font-weight:bold; margin: 10px 0 5px 0;">اختر حسابك للدخول السريع (الكاشير):</p>
-            <div id="quickUsersContainer" style="display:flex; justify-content:center; gap:20px; margin: 15px 0; flex-wrap:wrap; min-height: 80px; align-items:center;">
-            </div>
-
-            <hr style="border: 0; border-top: 1px dashed var(--border); margin: 15px 0;">
-
-            <!-- قسم دخول الأدمن / الدخول التقليدي -->
-            <p style="font-size:0.8rem; color:var(--text); opacity:0.7; margin-bottom:6px;">دخول الأدمن / حساب بكلمة سر:</p>
-            <input type="text" id="username" placeholder="اسم المستخدم" autocomplete="off">
-            <input type="password" id="password" placeholder="كلمة المرور">
-            <button class="btn btn-success" style="width:100%; margin-top:10px;" onclick="checkLogin()">دخول المنظومة</button>
-            <div style="font-size: 0.8rem; color: #38bdf8; font-weight: bold; margin-top: 15px; letter-spacing: 1px;">
-                POWERED BY Mohamed ALGHARYANI
-                <div style="font-size: 0.75rem; color: var(--text); opacity: 0.7; font-weight: normal; margin-top: 4px;">Version 1.1</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. شاشة الرصيد الافتتاحي -->
-    <div id="floatOverlay" class="modal-overlay" style="display:none;">
-        <div class="modal-box">
-            <h2>بداية الوردية</h2>
-            <p style="color:var(--text); opacity:0.8;">أدخل المبلغ النقدي الافتتاحي في الخزينة:</p>
-            <input type="number" id="openingBalanceInput" placeholder="0.00" step="any">
-            <button class="btn btn-success" style="width:100%; margin-top:10px;" onclick="startShift()">تأكيد وبدء العمل</button>
-        </div>
-    </div>
-
-    <!-- 3. لوحة إدارة المستخدمين -->
-    <div id="adminOverlay" class="modal-overlay" style="display:none;">
-        <div class="modal-box" style="width: 420px;">
-            <h2 style="margin-top: 0;">إدارة المستخدمين 👥</h2>
-            <div id="userCountDisplay" style="margin-bottom: 10px; font-weight: bold; color: var(--success);">
-                إجمالي المستخدمين: 0
-            </div>
-
-            <div style="border: 1px solid var(--border); padding: 10px; border-radius: 8px; margin-bottom: 12px; background: var(--input-bg);">
-                <h4 style="margin: 0 0 8px 0; color: #38bdf8;">إضافة / تعديل كاشير</h4>
-                <input type="text" id="newUsername" placeholder="اسم الكاشير (مثلاً: محمد / صلاح)">
-                <input type="password" id="newPassword" placeholder="كلمة المرور (اختياري للبيع السريع)">
-                <button class="btn btn-success" style="width:100%; margin-top:8px;" onclick="saveUser()">حفظ البيانات</button>
-            </div>
-
-            <h4 style="margin: 5px 0; text-align: right; color: var(--text);">قائمة المستخدمين المضافين:</h4>
-            <div id="usersListContainer" style="max-height: 180px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 5px; margin-bottom: 10px; text-align: right;">
-            </div>
-
-            <button class="btn btn-danger" style="width:100%; margin-top:4px;" onclick="document.getElementById('adminOverlay').style.display='none'">إغلاق النافذة</button>
-        </div>
-    </div>
-
-    <!-- 4. نافذة الإعدادات -->
-    <div id="settingsOverlay" class="modal-overlay" style="display:none;">
-        <div class="modal-box">
-            <h2 style="margin-top:0;">الإعدادات ⚙️</h2>
-
-            <div id="adminInvoiceSettingsSection" class="settings-section">
-                <h4>📝 إعدادات الفاتورة والطباعة (أدمن)</h4>
-                <label style="font-size:0.85rem;">اسم المحل / الفرع:</label>
-                <input type="text" id="settingStoreName" placeholder="دار الحجاب - فينيسيا">
-
-                <button class="btn btn-success" style="width:100%; margin-top:6px; padding:8px;" onclick="saveInvoiceSettings()">💾 حفظ الإعدادات</button>
-            </div>
-
-            <button class="btn btn-warning" style="width:100%; margin-top:8px;" onclick="toggleReturnMode()">
-                🔄 <span id="returnModeText">تفعيل وضع الاسترجاع</span>
-            </button>
-            <button class="btn" style="width:100%; margin-top:8px; background: #0284c7; color:white;" onclick="checkoutQuote()">
-                📄 إنشاء فاتورة عرض أسعار
-            </button>
-            
-            <button class="btn btn-warning" style="width:100%; margin-top:8px;" onclick="addExpenseFromSettings()">
-                ➖ إضافة مصاريف
-            </button>
-
-            <button class="btn" style="width:100%; margin-top:8px; background: #8b5cf6; color:white;" onclick="document.getElementById('csvFileInput').click()">
-                📂 استيراد أصناف العطور (CSV / Excel)
-            </button>
-            <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="importProductsCSV(this)">
-
-            <button class="btn btn-danger" style="width:100%; margin-top:8px;" onclick="closeShiftFromSettings()">
-                🔒 إغلاق الكاشير (Z-Report)
-            </button>
-
-            <div id="adminPriceSection" style="display:none; margin-top:8px;">
-                <button class="btn btn-success" style="width:100%;" onclick="addNewPrice()">
-                    ➕ إضافة سعر جديد لشجرة المبيعات
-                </button>
-            </div>
-
-            <button class="btn btn-logout" style="width:100%; margin-top:15px; background:#ef4444;" onclick="logout()">
-                🚪 تسجيل الخروج
-            </button>
-            <button class="btn" style="width:100%; margin-top:8px; background:#475569;" onclick="closeSettings()">إغلاق النافذة</button>
-        </div>
-    </div>
-
-    <!-- 5. نافذة التقارير الحالية -->
-    <div id="reportsOverlay" class="modal-overlay" style="display:none;">
-        <div class="modal-box" style="width: 420px; text-align: right;">
-            <h2 style="margin-top:0; text-align:center; color:#38bdf8;">📊 تقرير حركة الوردية الحالية</h2>
-            <div id="liveReportContent" style="font-size: 0.95rem; line-height: 1.6; margin-top: 10px;">
-            </div>
-            <button class="btn" style="width:100%; margin-top:15px; background:#475569;" onclick="closeLiveReportModal()">إغلاق النافذة</button>
-        </div>
-    </div>
-
-    <!-- 6. الواجهة الرئيسية -->
-    <div id="app" style="display:none;">
-        <div class="top-bar">
-            <div style="font-weight: bold; font-size: 1.1rem; color: var(--success);">
-                👤 الكاشير: <span id="displayUsername">-</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div class="live-clock">
-                    🕒 <span id="clockTime">00:00:00</span>
-                </div>
-                <button class="bell-btn" id="updateBellBtn" onclick="checkSystemUpdates(true)" title="فحص التحديثات السحابية">
-                    🔔
-                    <span class="bell-badge" id="updateBadge"></span>
-                </button>
-                <button class="btn btn-theme" style="padding: 8px 15px;" onclick="openSettings()">⚙️ الإعدادات</button>
-            </div>
-        </div>
-
-        <div class="wrapper">
-            <aside>
-                <h2 style="text-align:center; color: var(--primary); margin:0 0 10px 0;">شجرة المبيعات</h2>
-                <button class="btn btn-theme" onclick="toggleTheme()">🌗 تبديل أبيض / أسود</button>
-                <button class="btn btn-admin" id="adminBtn" onclick="openAdminModal()">⚙️ إدارة المستخدمين</button>
-                <button class="btn service-btn active" onclick="setService(this, 'نقدي')">نقدي (Cash)</button>
-                <button class="btn service-btn" onclick="setService(this, 'موبي كاش')">موبي كاش</button>
-                <button class="btn service-btn" onclick="setService(this, 'ادفع لي')">ادفع لي</button>
-                <button class="btn service-btn" onclick="setService(this, 'يسر')">يسر</button>
-                <button class="btn service-btn" onclick="setService(this, 'البطاقة المصرفية')">البطاقة المصرفية</button>
-                <button class="btn" style="background:#0284c7; color:white; margin-top:10px;" onclick="openLiveReportModal()">📊 التقارير الحالية</button>
-            </aside>
-
-            <main>
-                <div class="grid" id="grid"></div>
-            </main>
-
-            <section>
-                <h3 style="margin:0 0 8px 0; border-bottom: 2px solid var(--border); padding-bottom:8px;">
-                    الفاتورة | الدفع: <span id="currentServiceDisplay" style="color:var(--success)">نقدي</span>
-                    <span id="returnBadge" style="display:none; color:var(--danger); font-size:0.85rem; margin-right:5px;">[وضع استرجاع - نقدي]</span>
-                </h3>
-
-                <div class="hold-bar">
-                    <button class="hold-btn" onclick="holdCurrentBill()">⏸️ تجميد الفاتورة</button>
-                    <button class="hold-btn" style="background:#059669;" onclick="restoreHeldBill()">
-                        ▶️ استرجاع المؤقتة <span id="holdBadge" class="hold-badge" style="display:none;">1</span>
-                    </button>
-                </div>
-
-                <div id="cartList" style="flex-grow:1; overflow-y:auto;"></div>
-                <div style="border-top: 2px solid var(--border); padding-top:12px; margin-top:8px;">
-                    <div style="display:flex; justify-content:space-between; font-size:1.3rem; font-weight:bold; margin-bottom:12px;">
-                        <span>الإجمالي:</span>
-                        <span style="color:var(--success)"><span id="total">0.00</span> د.ل</span>
-                    </div>
-                    <button class="btn btn-success" style="width:100%; font-size:1.1rem; padding:14px;" onclick="checkout()">🖨️ إتمام الدفع والطباعة الفورية</button>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    <div id="printBox"></div>
-
-    <script>
-        // دالة تحجيم الشاشة التلقائي حسب دقة الشاشة وتكبير الويندوز
-        function autoFitScreen() {
-            let baseWidth = 1366; // العرض الافتراضي القياسي للمنظومة
-            let currentWidth = window.innerWidth;
-            if (currentWidth < baseWidth) {
-                let scale = currentWidth / baseWidth;
-                document.body.style.zoom = scale;
-            } else {
-                document.body.style.zoom = "1";
-            }
-        }
-        window.addEventListener('resize', autoFitScreen);
-
-        const CURRENT_VERSION = "1.1";
-        const UPDATE_CHECK_URL = "https://gist.githubusercontent.com/mohammd01/7f45992495a08ecc5d76c48ac65781de/raw/version.txt";
-        const GDRIVE_VIEW_URL = "https://drive.google.com/uc?export=download&id=19mDybZ1eLxwCpRu-dgkBjEhkY9Uqmcvi";
-
-        function startLiveClock() {
-            setInterval(() => {
-                let now = new Date();
-                let hours = ("0" + now.getHours()).slice(-2);
-                let minutes = ("0" + now.getMinutes()).slice(-2);
-                let seconds = ("0" + now.getSeconds()).slice(-2);
-                let clockEl = document.getElementById('clockTime');
-                if (clockEl) clockEl.innerText = `${hours}:${minutes}:${seconds}`;
-            }, 1000);
-        }
-        startLiveClock();
-
-        function safeGet(key, fallback) {
-            try {
-                let val = localStorage.getItem(key);
-                return val ? JSON.parse(val) : fallback;
-            } catch (e) { return fallback; }
-        }
-
-        function safeSet(key, value) {
-            try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
-        }
-
-        const DEFAULT_PRICES = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100];
-
-        if (safeGet('dh_theme', 'dark') === 'light') document.body.classList.add('light-mode');
-
-        function toggleTheme() {
-            document.body.classList.toggle('light-mode');
-            safeSet('dh_theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-        }
-
-        let dbUsers = safeGet('dh_users', { 'admin': '3894' });
-        let savedState = safeGet('dh_active_state', null);
-        let savedPrices = safeGet('dh_prices', DEFAULT_PRICES);
-        let savedProducts = safeGet('dh_products', []);
-
-        let state = savedState || {
-            currentUser: '',
-            cart: [],
-            heldCart: null,
-            service: 'نقدي',
-            openingBalance: 0,
-            sales: { 'نقدي': 0, 'موبي كاش': 0, 'ادفع لي': 0, 'يسر': 0, 'البطاقة المصرفية': 0 },
-            perfumeSales: 0,
-            expenses: [],
-            invoiceNo: 1000,
-            prices: savedPrices,
-            products: savedProducts,
-            storeName: 'دار الحجاب - فينيسيا',
-            paperWidth: 70,
-            isShiftActive: false,
-            isReturnMode: false
-        };
-
-        state.paperWidth = 70;
-
-        if (state.perfumeSales === undefined) state.perfumeSales = 0;
-        if (!state.prices || state.prices.length === 0) state.prices = DEFAULT_PRICES;
-        if (!state.products) state.products = [];
-        if (!state.storeName) state.storeName = 'دار الحجاب - فينيسيا';
-
-        function applyPrintWidth() {
-            let styleTag = document.getElementById('dynamicPrintStyle');
-            if (!styleTag) {
-                styleTag = document.createElement('style');
-                styleTag.id = 'dynamicPrintStyle';
-                document.head.appendChild(styleTag);
-            }
-            styleTag.innerHTML = `
-                @media print {
-                    @page { size: 70mm auto; margin: 0; }
-                    #printBox { width: 66mm !important; }
-                }
-            `;
-        }
-        applyPrintWidth();
-
-        function saveState() {
-            safeSet('dh_active_state', state);
-            safeSet('dh_prices', state.prices);
-            safeSet('dh_products', state.products);
-        }
-
-        // رسم دوائر الكاشير للدخول السريع
-        function renderQuickAvatars() {
-            let container = document.getElementById('quickUsersContainer');
-            if (!container) return;
-            
-            let usersKeys = Object.keys(dbUsers).filter(u => u !== 'admin');
-            
-            if (usersKeys.length === 0) {
-                container.innerHTML = '<span style="font-size:0.85rem; opacity:0.6;">لا يوجد حسابات كاشير مضافة حالياً</span>';
-                return;
-            }
-
-            let html = '';
-            usersKeys.forEach(u => {
-                html += `
-                    <div class="avatar-card" onclick="quickLogin('${u}')" style="cursor:pointer; text-align:center;">
-                        <div class="avatar-circle">👤</div>
-                        <span style="font-weight:bold; font-size:0.95rem; color:var(--text); display:block;">${u}</span>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        // الدخول السريع فور الضغط على الدائرة
-        function quickLogin(username) {
-            state.currentUser = username;
-            document.getElementById('displayUsername').innerText = username;
-            saveState();
-
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('floatOverlay').style.display = 'flex';
-
-            // الكاشير لا يملك صلاحيات الأدمن
-            document.getElementById('adminBtn').style.display = 'none';
-            document.getElementById('adminPriceSection').style.display = 'none';
-            initGrid();
-        }
-
-        function isNewerVersion(remote, current) {
-            let r = remote.split('.').map(Number);
-            let c = current.split('.').map(Number);
-            for (let i = 0; i < Math.max(r.length, c.length); i++) {
-                let rNum = r[i] || 0;
-                let cNum = c[i] || 0;
-                if (rNum > cNum) return true;
-                if (rNum < cNum) return false;
-            }
-            return false;
-        }
-
-        function checkSystemUpdates(manualClick = false) {
-            if (!UPDATE_CHECK_URL || UPDATE_CHECK_URL.includes("YOUR_GIST_HASH")) {
-                if (manualClick) alert("يرجى استبدال رابط UPDATE_CHECK_URL برابط الـ Raw الخاص بك أولاً.");
-                return;
-            }
-
-            fetch(UPDATE_CHECK_URL + "?t=" + new Date().getTime(), { cache: "no-store" })
-                .then(response => response.text())
-                .then(remoteVersion => {
-                    remoteVersion = remoteVersion.trim();
-                    if (isNewerVersion(remoteVersion, CURRENT_VERSION)) {
-                        document.getElementById('updateBadge').style.display = 'block';
-                        if (confirm(`🔔 تنبيه سحابي: يتوفر إصدار جديد (${remoteVersion}) للمنظومة!\nإصدارك الحالي: (${CURRENT_VERSION})\n\nهل تريد تنزيل التحديث الآن؟`)) {
-                            if (window.chrome && window.chrome.webview) {
-                                window.chrome.webview.postMessage(JSON.stringify({
-                                    action: "update_app",
-                                    url: GDRIVE_VIEW_URL
-                                }));
-                            } else {
-                                window.open(GDRIVE_VIEW_URL, '_blank');
-                            }
-                        }
-                    } else {
-                        document.getElementById('updateBadge').style.display = 'none';
-                        if (manualClick) {
-                            alert(`أنت الآن تعمل على أحدث نسخة متوفرة بالفعل! ✅\n(إصدار المنظومة الحالية: ${CURRENT_VERSION})`);
-                        }
-                    }
-                })
-                .catch(err => {
-                    if (manualClick) {
-                        alert("تعذر الاتصال برابط التحديث، تأكد من صحة الرابط المنسوخ ومن الاتصال بالإنترنت.");
-                    }
-                });
-        }
-
-        function checkLogin() {
-            let u = document.getElementById('username').value.trim();
-            let p = document.getElementById('password').value.trim();
-
-            if (dbUsers[u] && (dbUsers[u] === p || p === "")) {
-                state.currentUser = u;
-                document.getElementById('displayUsername').innerText = u;
-                saveState();
-
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('floatOverlay').style.display = 'flex';
-
-                if (u === 'admin') {
-                    document.getElementById('adminBtn').style.display = 'block';
-                    document.getElementById('adminPriceSection').style.display = 'block';
-                } else {
-                    document.getElementById('adminBtn').style.display = 'none';
-                    document.getElementById('adminPriceSection').style.display = 'none';
-                }
-                initGrid();
-            } else {
-                alert("بيانات الدخول غير صحيحة!");
-            }
-        }
-
-        function logout() {
-            try { localStorage.removeItem('dh_active_state'); } catch(e){}
-            document.getElementById('app').style.display = 'none';
-            document.getElementById('floatOverlay').style.display = 'none';
-            document.getElementById('adminOverlay').style.display = 'none';
-            document.getElementById('settingsOverlay').style.display = 'none';
-            document.getElementById('reportsOverlay').style.display = 'none';
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-            document.getElementById('adminBtn').style.display = 'none';
-            document.getElementById('loginOverlay').style.display = 'flex';
-
-            state.currentUser = '';
-            state.cart = [];
-            state.heldCart = null;
-            state.openingBalance = 0;
-            state.sales = { 'نقدي': 0, 'موبي كاش': 0, 'ادفع لي': 0, 'يسر': 0, 'البطاقة المصرفية': 0 };
-            state.perfumeSales = 0;
-            state.expenses = [];
-            state.isShiftActive = false;
-            state.isReturnMode = false;
-
-            renderQuickAvatars();
-        }
-
-        function startShift() {
-            let val = parseFloat(document.getElementById('openingBalanceInput').value);
-            state.openingBalance = isNaN(val) ? 0 : val;
-            state.isShiftActive = true;
-            saveState();
-
-            document.getElementById('floatOverlay').style.display = 'none';
-            document.getElementById('app').style.display = 'block';
-            initGrid();
-            
-            checkSystemUpdates(false);
-        }
-
-        function openAdminModal() {
-            renderUsersList();
-            document.getElementById('adminOverlay').style.display = 'flex';
-        }
-
-        function renderUsersList() {
-            let container = document.getElementById('usersListContainer');
-            let countDisplay = document.getElementById('userCountDisplay');
-            if (!container || !countDisplay) return;
-
-            let usersKeys = Object.keys(dbUsers);
-            countDisplay.innerText = `إجمالي المستخدمين المضافين: ${usersKeys.length}`;
-
-            let html = '';
-            usersKeys.forEach(u => {
-                let isAdmin = (u === 'admin');
-                html += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding: 6px 4px; border-bottom: 1px solid var(--border);">
-                        <div>
-                            <strong>👤 ${u}</strong> ${isAdmin ? '<span style="color:#38bdf8; font-size:0.8rem;">(آدمن)</span>' : ''}
-                        </div>
-                        <div>
-                            <button class="btn btn-warning" style="padding: 4px 8px; font-size: 0.8rem; margin-left: 4px;" onclick="editUserPassword('${u}')">🔑 كلمة السر</button>
-                            ${!isAdmin ? `<button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.8rem;" onclick="deleteUser('${u}')">🗑️ حذف</button>` : ''}
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function saveUser() {
-            let nu = document.getElementById('newUsername').value.trim();
-            let np = document.getElementById('newPassword').value.trim();
-            if (nu) {
-                dbUsers[nu] = np || ""; // قبول اسم المستخدم حتى بدون كلمة مرور
-                safeSet('dh_users', dbUsers);
-                alert(`تم حفظ/تحديث الكاشير (${nu}) بنجاح.`);
-                document.getElementById('newUsername').value = '';
-                document.getElementById('newPassword').value = '';
-                renderUsersList();
-                renderQuickAvatars();
-            } else {
-                alert("الرجاء إدخال اسم الكاشير.");
-            }
-        }
-
-        function editUserPassword(username) {
-            let newPass = prompt(`أدخل كلمة المرور الجديدة للمستخدم (${username}):`);
-            if (newPass !== null) {
-                dbUsers[username] = newPass.trim();
-                safeSet('dh_users', dbUsers);
-                alert(`تم تغيير كلمة المرور للمستخدم (${username}) بنجاح.`);
-                renderUsersList();
-            }
-        }
-
-        function deleteUser(username) {
-            if (username === 'admin') return alert("لا يمكن حذف حساب الأدمن الرئيسي!");
-            if (confirm(`هل أنت تأكد من حذف المستخدم (${username}) نهائياً؟`)) {
-                delete dbUsers[username];
-                safeSet('dh_users', dbUsers);
-                alert(`تم حذف المستخدم (${username}) بنجاح.`);
-                renderUsersList();
-                renderQuickAvatars();
-            }
-        }
-
-        function initGrid() {
-            const grid = document.getElementById('grid');
-            if (!grid) return;
-            grid.innerHTML = '';
-            state.prices.forEach(p => {
-                grid.innerHTML += `<div class="card" onclick="addToCart(${p})"><span>${p}</span>دينار</div>`;
-            });
-            updateHoldBadge();
-        }
-
-        function importProductsCSV(input) {
-            let file = input.files[0];
-            if (!file) return;
-
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let text = e.target.result;
-                let lines = text.split(/\r\n|\n/);
-                let importedList = [];
-
-                lines.forEach((line, idx) => {
-                    if (!line.trim()) return;
-                    let cols = line.split(',');
-                    if (idx === 0 && (cols[0].includes('باركود') || cols[0].toLowerCase().includes('barcode'))) return;
-
-                    if (cols.length >= 3) {
-                        let barcode = cols[0].trim();
-                        let name = cols[1].trim();
-                        let price = parseFloat(cols[2].trim());
-
-                        if (barcode && name && !isNaN(price)) {
-                            importedList.push({ barcode: barcode, name: name, price: price });
-                        }
-                    }
-                });
-
-                if (importedList.length > 0) {
-                    state.products = importedList;
-                    saveState();
-                    alert(`نجح الاستيراد! تم حفظ (${importedList.length}) صنف عطور في المنظومة.`);
-                } else {
-                    alert("لم يتم العثور على بيانات صالحة! التأكد من أن الترتيب هو: باركود,اسم العطر,السعر");
-                }
-                input.value = '';
-                closeSettings();
-            };
-            reader.readAsText(file, 'UTF-8');
-        }
-
-        let barcodeBuffer = "";
-        let barcodeTimer;
-
-        document.addEventListener('keydown', function(e) {
-            if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-
-            if (e.key === 'Enter') {
-                if (barcodeBuffer.trim().length >= 3) {
-                    handleScannedBarcode(barcodeBuffer.trim());
-                    barcodeBuffer = "";
-                }
-            } else if (e.key.length === 1) {
-                barcodeBuffer += e.key;
-                clearTimeout(barcodeTimer);
-                barcodeTimer = setTimeout(() => { barcodeBuffer = ""; }, 250);
-            }
-        });
-
-        function handleScannedBarcode(code) {
-            let found = state.products.find(p => p.barcode === code);
-            if (found) {
-                addNamedProductToCart(found.name, found.price);
-            } else {
-                alert(`لم يتم العثور على صنف بالباركود: ${code}\nيرجى التأكد من رفع الأصناف في ملف الإكسل.`);
-            }
-        }
-
-        function addNamedProductToCart(name, price) {
-            let finalPrice = state.isReturnMode ? -Math.abs(price) : Math.abs(price);
-            let existing = state.cart.find(item => item.name === name && item.price === finalPrice);
-            if (existing) {
-                existing.qty++;
-            } else {
-                state.cart.push({ name: name, price: finalPrice, qty: 1 });
-            }
-            renderCart();
-            saveState();
-        }
-
-        function holdCurrentBill() {
-            if (state.cart.length === 0) return alert("السلة فارغة، لا يوجد ما يتم تجميده!");
-            state.heldCart = JSON.parse(JSON.stringify(state.cart));
-            state.cart = [];
-            renderCart();
-            saveState();
-            updateHoldBadge();
-            alert("تم تجميد الفاتورة الحالية بنجاح ⏸️.");
-        }
-
-        function restoreHeldBill() {
-            if (!state.heldCart || state.heldCart.length === 0) return alert("لا توجد فاتورة مجمدة حالياً!");
-            if (state.cart.length > 0) {
-                if (!confirm("توجد عناصر في السلة الحالية. هل تريد استبدالها بالفاتورة المجمدة؟")) return;
-            }
-            state.cart = JSON.parse(JSON.stringify(state.heldCart));
-            state.heldCart = null;
-            renderCart();
-            saveState();
-            updateHoldBadge();
-            alert("تم استرجاع الفاتورة المجمدة بنجاح ▶️.");
-        }
-
-        function updateHoldBadge() {
-            let badge = document.getElementById('holdBadge');
-            if (badge) {
-                badge.style.display = (state.heldCart && state.heldCart.length > 0) ? 'inline' : 'none';
-            }
-        }
-
-        function openSettings() { 
-            let adminSection = document.getElementById('adminInvoiceSettingsSection');
-            if (state.currentUser === 'admin') {
-                adminSection.style.display = 'block';
-                document.getElementById('settingStoreName').value = state.storeName || '';
-            } else {
-                adminSection.style.display = 'none';
-            }
-            document.getElementById('settingsOverlay').style.display = 'flex'; 
-        }
-
-        function closeSettings() { document.getElementById('settingsOverlay').style.display = 'none'; }
-
-        function openLiveReportModal() {
-            let totalCashSales = state.sales['نقدي'] || 0;
-            let totalExpensesSum = state.expenses.reduce((sum, e) => sum + (e.val || 0), 0);
-            let expectedCash = state.openingBalance + totalCashSales - totalExpensesSum;
-            let totalBankSales = (state.sales['موبي كاش'] || 0) + (state.sales['ادفع لي'] || 0) + (state.sales['يسر'] || 0) + (state.sales['البطاقة المصرفية'] || 0);
-            let perfumeSalesTotal = state.perfumeSales || 0;
-
-            let html = `
-                <div style="border: 1px solid var(--border); padding: 10px; border-radius: 8px; background: var(--input-bg); margin-bottom: 10px;">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>👤 الكاشير:</span> <strong>${state.currentUser}</strong></div>
-                    <div style="display:flex; justify-content:space-between;"><span>🕒 الوقت:</span> <strong>${getFormattedTime()}</strong></div>
-                </div>
-
-                <div style="border: 1px solid var(--border); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-                    <h4 style="margin:0 0 8px 0; color:var(--success); border-bottom:1px dashed var(--border); padding-bottom:4px;">💵 النقدية والدرج</h4>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>الرصيد الافتتاحي:</span> <strong>${state.openingBalance.toFixed(2)} د.ل</strong></div>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>المبيعات النقدية:</span> <strong>${totalCashSales.toFixed(2)} د.ل</strong></div>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:var(--danger);"><span>إجمالي المصاريف:</span> <strong>-${totalExpensesSum.toFixed(2)} د.ل</strong></div>
-                    <div style="display:flex; justify-content:space-between; font-weight:bold; color:var(--success); border-top:1px solid var(--border); padding-top:4px; margin-top:4px;"><span>النقدية المتوقعة في الدرج:</span> <span>${expectedCash.toFixed(2)} د.ل</span></div>
-                </div>
-
-                <div style="border: 1px solid var(--border); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-                    <h4 style="margin:0 0 8px 0; color:#38bdf8; border-bottom:1px dashed var(--border); padding-bottom:4px;">💳 الخدمات المصرفية</h4>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span>موبي كاش:</span> <span>${(state.sales['موبي كاش'] || 0).toFixed(2)} د.ل</span></div>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span>ادفع لي:</span> <span>${(state.sales['ادفع لي'] || 0).toFixed(2)} د.ل</span></div>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span>يسر:</span> <span>${(state.sales['يسر'] || 0).toFixed(2)} د.ل</span></div>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span>بطاقة مصرفية:</span> <span>${(state.sales['البطاقة المصرفية'] || 0).toFixed(2)} د.ل</span></div>
-                    <div style="display:flex; justify-content:space-between; font-weight:bold; color:#38bdf8; border-top:1px solid var(--border); padding-top:4px; margin-top:4px;"><span>إجمالي المصرفي:</span> <span>${totalBankSales.toFixed(2)} د.ل</span></div>
-                </div>
-
-                <div style="border: 1px solid var(--border); padding: 10px; border-radius: 8px; margin-bottom: 10px; display:flex; justify-content:space-between; font-weight:bold;">
-                    <span>🌸 مبيعات العطور الفعلية:</span>
-                    <span style="color:#a855f7;">${perfumeSalesTotal.toFixed(2)} د.ل</span>
-                </div>
-            `;
-
-            document.getElementById('liveReportContent').innerHTML = html;
-            document.getElementById('reportsOverlay').style.display = 'flex';
-        }
-
-        function closeLiveReportModal() {
-            document.getElementById('reportsOverlay').style.display = 'none';
-        }
-
-        function saveInvoiceSettings() {
-            if (state.currentUser !== 'admin') return alert("صلاحية مخصصة للآدمن فقط.");
-            let nameInput = document.getElementById('settingStoreName').value.trim();
-
-            if (nameInput) state.storeName = nameInput;
-            state.paperWidth = 70;
-
-            applyPrintWidth();
-            saveState();
-            alert("تم حفظ إعدادات الفاتورة بنجاح 💾!");
-        }
-
-        function toggleReturnMode() {
-            if (!state.isReturnMode && state.service !== 'نقدي') {
-                alert("تنبيه: وضع الاسترجاع متاح للدفع النقدي فقط. تم تحويل طريقة الدفع تلقائياً إلى 'نقدي'.");
-                forceServiceCash();
-            }
-            state.isReturnMode = !state.isReturnMode;
-            document.getElementById('returnBadge').style.display = state.isReturnMode ? 'inline' : 'none';
-            document.getElementById('returnModeText').innerText = state.isReturnMode ? 'إلغاء وضع الاسترجاع' : 'تفعيل وضع الاسترجاع';
-            saveState();
-            closeSettings();
-        }
-
-        function forceServiceCash() {
-            document.querySelectorAll('.service-btn').forEach(b => {
-                if (b.innerText.includes('نقدي')) b.classList.add('active');
-                else b.classList.remove('active');
-            });
-            state.service = 'نقدي';
-            document.getElementById('currentServiceDisplay').innerText = 'نقدي';
-        }
-
-        function setService(el, name) {
-            if (state.isReturnMode && name !== 'نقدي') {
-                alert("عذراً! لا يمكن استخدام الاسترجاع إلا مع الدفع النقدي فقط.");
-                return;
-            }
-            document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
-            state.service = name;
-            document.getElementById('currentServiceDisplay').innerText = name;
-            saveState();
-        }
-
-        function addNewPrice() {
-            let p = parseFloat(prompt("أدخل السعر الجديد بالدينار:"));
-            if (!isNaN(p) && p > 0) {
-                if (!state.prices.includes(p)) {
-                    state.prices.push(p);
-                    state.prices.sort((a, b) => a - b);
-                    saveState();
-                    initGrid();
-                    alert(`تمت إضافة الفئة السعرية (${p} د.ل) بنجاح.`);
-                } else {
-                    alert("هذا السعر موجود بالفعل!");
-                }
-            }
-            closeSettings();
-        }
-
-        function addToCart(price) {
-            let finalPrice = state.isReturnMode ? -Math.abs(price) : Math.abs(price);
-            let existing = state.cart.find(item => !item.name && item.price === finalPrice);
-            if (existing) {
-                existing.qty++;
-            } else {
-                state.cart.push({ price: finalPrice, qty: 1 });
-            }
-            renderCart();
-            saveState();
-        }
-
-        function removeFromCart(index) {
-            state.cart.splice(index, 1);
-            renderCart();
-            saveState();
-        }
-
-        function renderCart() {
-            let list = document.getElementById('cartList');
-            if (!list) return;
-            list.innerHTML = state.cart.map((item, index) => {
-                let displayName = item.name ? `${item.name}` : `فئة ${item.price}`;
-                return `
-                    <div class="cart-item">
-                        <div style="display:flex; align-items:center;">
-                            <input type="checkbox" class="item-checkbox">
-                            <span class="delete-btn" onclick="removeFromCart(${index})">✖</span>
-                            <span>${displayName} (x${item.qty})</span>
-                        </div>
-                        <span>${(item.price * item.qty).toFixed(2)} د.ل</span>
-                    </div>
-                `;
-            }).join('');
-
-            let total = state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            document.getElementById('total').innerText = total.toFixed(2);
-        }
-
-        function addExpenseFromSettings() {
-            closeSettings();
-            addExpense();
-        }
-
-        function closeShiftFromSettings() {
-            closeSettings();
-            closeShift();
-        }
-
-        function addExpense() {
-            let name = prompt("بيان المصروف:");
-            if (!name) return;
-            let val = parseFloat(prompt("قيمة المصروف بالدينار:"));
-            if (val > 0) {
-                state.expenses.push({ name: name, val: val });
-                saveState();
-                alert(`تم تسجيل المصروف (${name}) بقيمة ${val} د.ل وخصمه من النقدية.`);
-            }
-        }
-
-        function getFormattedTime() {
-            let now = new Date();
-            return now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear() + " " + ("0" + now.getHours()).slice(-2) + ":" + ("0" + now.getMinutes()).slice(-2);
-        }
-
-        function checkout() {
-            if (state.cart.length === 0) return alert("الفاتورة فارغة!");
-
-            if (state.isReturnMode && state.service !== 'نقدي') {
-                alert("عذراً! عمليات الاسترجاع مسموحة فقط نقداً!");
-                forceServiceCash();
-                return;
-            }
-
-            let total = state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            let perfumeTotal = state.cart.filter(item => item.name).reduce((sum, item) => sum + (item.price * item.qty), 0);
-
-            if (!state.isReturnMode) {
-                state.sales[state.service] = (state.sales[state.service] || 0) + total;
-                state.perfumeSales = (state.perfumeSales || 0) + perfumeTotal;
-            } else {
-                state.sales['نقدي'] = (state.sales['نقدي'] || 0) + total; 
-                state.perfumeSales = (state.perfumeSales || 0) + perfumeTotal;
-            }
-
-            state.invoiceNo++;
-            saveState();
-
-            let itemsHtml = state.cart.map(item => {
-                let itemName = item.name ? item.name : `${item.price.toFixed(2)} د.ل`;
-                return `
-                    <div class="receipt-item">
-                        <span>${item.qty}.00 pcs x ${itemName}</span>
-                        <span>${(item.price * item.qty).toFixed(2)}</span>
-                    </div>
-                `;
-            }).join('');
-
-            let storeNameDisplay = state.storeName || "دار الحجاب - فينيسيا";
-            let invoiceTitle = state.isReturnMode ? "فاتورة إرجاع بضاعة" : storeNameDisplay;
-
-            let printContent = `
-                <div class="receipt-header">
-                    <h2>DH</h2>
-                    <p>${invoiceTitle}</p>
-                    <p>Since 2001</p>
-                    <p style="font-size:10px; margin-top:4px;">البضاعة المباعة لا تسترجع والاستبدال خلال 24 ساعة</p>
-                </div>
-                <div style="margin-bottom: 8px;">
-                    <p>التاريخ: ${getFormattedTime()}</p>
-                    <p>رقم الفاتورة: CD${state.invoiceNo}-</p>
-                    <p>الكاشير: ${state.currentUser}</p>
-                </div>
-                <div class="receipt-items">
-                    ${itemsHtml}
-                </div>
-                <div class="receipt-totals">
-                    <div class="receipt-item"><span>Total:</span> <span>${total.toFixed(2)}</span></div>
-                    <div class="receipt-item grand-total"><span>Paid Amount:</span> <span>${total.toFixed(2)}</span></div>
-                    <div class="receipt-item"><span>Due Amount:</span> <span>0.00</span></div>
-                </div>
-                <div class="receipt-footer">
-                    <p>طريقة الدفع: ${state.service}</p>
-                    <p>*** شكراً لإختياركم ${storeNameDisplay} ***</p>
-                </div>
-            `;
-
-            document.getElementById('printBox').innerHTML = printContent;
-            applyPrintWidth();
-
-            if (window.chrome && window.chrome.webview) {
-                window.chrome.webview.postMessage("print_receipt");
-            } else {
-                window.print();
-            }
-
-            state.cart = [];
-            state.isReturnMode = false;
-            document.getElementById('returnBadge').style.display = 'none';
-            renderCart();
-            saveState();
-        }
-
-        function checkoutQuote() {
-            if (state.cart.length === 0) return alert("السلة فارغة لإنشاء عرض أسعار!");
-
-            let total = state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-
-            let itemsHtml = state.cart.map(item => {
-                let itemName = item.name ? item.name : `${item.price.toFixed(2)} د.ل`;
-                return `
-                    <div class="receipt-item">
-                        <span>${item.qty}.00 pcs x ${itemName}</span>
-                        <span>${(item.price * item.qty).toFixed(2)}</span>
-                    </div>
-                `;
-            }).join('');
-
-            let storeNameDisplay = state.storeName || "دار الحجاب -   ";
-
-            let printContent = `
-                <div class="receipt-header">
-                    <h2>DH - عرض أسعار</h2>
-                    <p>${storeNameDisplay}</p>
-                    <p style="font-size:10px; margin-top:4px;">*** هذه الفاتورة للعرض فقط وليست فاتورة شراء ***</p>
-                </div>
-                <div style="margin-bottom: 8px;">
-                    <p>التاريخ: ${getFormattedTime()}</p>
-                    <p>الموظف: ${state.currentUser}</p>
-                </div>
-                <div class="receipt-items">
-                    ${itemsHtml}
-                </div>
-                <div class="receipt-totals">
-                    <div class="receipt-item grand-total"><span>الإجمالي الإفتراضي:</span> <span>${total.toFixed(2)}</span></div>
-                </div>
-                <div class="receipt-footer">
-                    <p>*** ${storeNameDisplay} ترحب بكم ***</p>
-                </div>
-            `;
-
-            document.getElementById('printBox').innerHTML = printContent;
-            applyPrintWidth();
-
-            if (window.chrome && window.chrome.webview) {
-                window.chrome.webview.postMessage("print_receipt");
-            } else {
-                window.print();
-            }
-
-            closeSettings();
-        }
-
-        function closeShift() {
-            let totalCashSales = state.sales['نقدي'] || 0;
-            let totalExpensesSum = state.expenses.reduce((sum, e) => sum + (e.val || 0), 0);
-            let expectedCash = state.openingBalance + totalCashSales - totalExpensesSum;
-
-            let actualInput = prompt(`إغلاق الخزينة النقدي:\n- الرصيد الافتتاحي: ${state.openingBalance.toFixed(2)} د.ل\n- المبيعات النقدية: ${totalCashSales.toFixed(2)} د.ل\n- إجمالي المصاريف: ${totalExpensesSum.toFixed(2)} د.ل\n- النقدية المتوقعة في الدرج: ${expectedCash.toFixed(2)} د.ل\n\nأدخل المبلغ الفعلي الموجود في الخزينة الآن:`);
-
-            if (actualInput === null) return;
-
-            let actualCash = parseFloat(actualInput) || 0;
-            let diff = actualCash - expectedCash;
-            let diffText = diff >= 0 ? `+${diff.toFixed(2)} (فائض)` : `${diff.toFixed(2)} (عجز)`;
-
-            let expensesHtml = state.expenses.length > 0
-                ? state.expenses.map(e => `<div class="receipt-item"><span>- ${e.name}:</span> <span>${(e.val || 0).toFixed(2)}</span></div>`).join('')
-                : `<div class="receipt-item"><span>لا توجد مصاريف</span> <span>0.00</span></div>`;
-
-            let totalBankSales = (state.sales['موبي كاش'] || 0) + (state.sales['ادفع لي'] || 0) + (state.sales['يسر'] || 0) + (state.sales['البطاقة المصرفية'] || 0);
-            let perfumeSalesTotal = state.perfumeSales || 0;
-            let storeNameDisplay = state.storeName || "دار الحجاب -  ";
-
-            let printContent = `
-                <div class="receipt-header">
-                    <h2>DH Z-Report</h2>
-                    <p>تقرير إغلاق الكاشير النهائي - ${storeNameDisplay}</p>
-                    <p>التاريخ: ${getFormattedTime()}</p>
-                    <p>الكاشير: ${state.currentUser}</p>
-                </div>
-
-                <div class="receipt-items">
-                    <p style="font-weight:bold; margin:0 0 5px 0;">[ حركة النقدية ]</p>
-                    <div class="receipt-item"><span>الرصيد الافتتاحي:</span> <span>${state.openingBalance.toFixed(2)}</span></div>
-                    <div class="receipt-item"><span>المبيعات النقدية:</span> <span>${totalCashSales.toFixed(2)}</span></div>
-                </div>
-
-                <div class="receipt-items">
-                    <p style="font-weight:bold; margin:0 0 5px 0;">[ تفاصيل المصاريف ]</p>
-                    ${expensesHtml}
-                    <div class="receipt-item" style="border-top:1px dashed black; margin-top:4px; padding-top:4px; font-weight:bold;">
-                        <span>إجمالي المصاريف:</span> <span>-${totalExpensesSum.toFixed(2)}</span>
-                    </div>
-                </div>
-
-                <div class="receipt-items">
-                    <p style="font-weight:bold; margin:0 0 5px 0;">[ الخدمات المصرفية ]</p>
-                    <div class="receipt-item"><span>موبي كاش:</span> <span>${(state.sales['موبي كاش'] || 0).toFixed(2)}</span></div>
-                    <div class="receipt-item"><span>ادفع لي:</span> <span>${(state.sales['ادفع لي'] || 0).toFixed(2)}</span></div>
-                    <div class="receipt-item"><span>يسر:</span> <span>${(state.sales['يسر'] || 0).toFixed(2)}</span></div>
-                    <div class="receipt-item"><span>بطاقة مصرفية:</span> <span>${(state.sales['البطاقة المصرفية'] || 0).toFixed(2)}</span></div>
-                    <div class="receipt-item" style="border-top:1px dashed black; margin-top:4px; padding-top:4px; font-weight:bold;">
-                        <span>إجمالي المصرفي:</span> <span>${totalBankSales.toFixed(2)}</span>
-                    </div>
-                </div>
-
-                <div class="receipt-items">
-                    <p style="font-weight:bold; margin:0 0 5px 0;">[ مبيعات العطور ]</p>
-                    <div class="receipt-item" style="font-weight:bold;">
-                        <span>إجمالي مبيعات العطور:</span> <span>${perfumeSalesTotal.toFixed(2)}</span>
-                    </div>
-                </div>
-
-                <div class="receipt-totals">
-                    <div class="receipt-item"><span>الصافي النقدي المتوقع:</span> <span>${expectedCash.toFixed(2)}</span></div>
-                    <div class="receipt-item"><span>الرصيد النقدي الفعلي:</span> <span>${actualCash.toFixed(2)}</span></div>
-                    <div class="receipt-item grand-total"><span>الفارق (عجز/فائض):</span> <span>${diffText}</span></div>
-                </div>
-
-                <div class="receipt-footer">
-                    <p>*** تم إغلاق الوردية وتصفير العدادات ***</p>
-                </div>
-            `;
-
-            document.getElementById('printBox').innerHTML = printContent;
-            applyPrintWidth();
-
-            if (window.chrome && window.chrome.webview) {
-                window.chrome.webview.postMessage("print_receipt");
-            } else {
-                window.print();
-            }
-
-            logout();
-        }
-
-        window.onload = function() {
-            autoFitScreen();
-            renderQuickAvatars();
-
-            if (state.isShiftActive && state.currentUser) {
-                document.getElementById('displayUsername').innerText = state.currentUser;
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('floatOverlay').style.display = 'none';
-                document.getElementById('app').style.display = 'block';
-
-                if (state.currentUser === 'admin') {
-                    document.getElementById('adminBtn').style.display = 'block';
-                    document.getElementById('adminPriceSection').style.display = 'block';
-                }
-                initGrid();
-                renderCart();
-            }
-        };
-
-        let passInput = document.getElementById('password');
-        if (passInput) {
-            passInput.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') checkLogin();
-            });
-        }
-    </script>
+  <div id="loginScreen" class="login" dir="rtl"></div>
+  <div id="appScreen" class="app hidden" dir="rtl"></div>
+  <div id="modalRoot"></div>
+  <div id="printArea" class="receipt" aria-hidden="true"></div>
+
+  <script>
+  /* ================================================================
+     Standalone POS application logic
+     Data is stored in localStorage under dh-pos-standalone-state.
+     The app is intentionally dependency-free: copy this entire file.
+  ================================================================== */
+  (() => {
+    const ASSETS = {
+      hero: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iODAwIiB2aWV3Qm94PSIwIDAgODAwIDgwMCI+PHJhZGlhbEdyYWRpZW50IGlkPSJnIiBjeD0iMzAlIiBjeT0iMzAlIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxZTFiMmUiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNzA5MGYiLz48L3JhZGlhbEdyYWRpZW50PjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iODAwIiBmaWxsPSJ1cmwoI2cpIi8+PGNpcmNsZSBjeD0iNjAwIiBjeT0iMjAwIiByPSIyNTAiIGZpbGw9IiM5MDBjM2YiIG9wYWNpdHk9IjAuMTUiLz48L3N2Zz4=',
+      fabric: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iODAwIiB2aWV3Qm94PSIwIDAgODAwIDgwMCI+PHJhZGlhbEdyYWRpZW50IGlkPSJnIiBjeD0iMzAlIiBjeT0iMzAlIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxZTFiMmUiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNzA5MGYiLz48L3JhZGlhbEdyYWRpZW50PjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iODAwIiBmaWxsPSJ1cmwoI2cpIi8+PGNpcmNsZSBjeD0iNjAwIiBjeT0iMjAwIiByPSIyNTAiIGZpbGw9IiM5MDBjM2YiIG9wYWNpdHk9IjAuMTUiLz48L3N2Zz4=',
+      still: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663555364421/dh-boutique-stilllife_126461cc.jpg',
+      logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIHJ4PSIyMCIgZmlsbD0iIzkwMGMzZiIvPjx0ZXh0IHg9IjUwIiB5PSI1OCIgZm9udC1zaXplPSI0MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZDVhZjcyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5ESDwvdGV4dD48L3N2Zz4='
+    };
+    const KEY = 'dh-pos-standalone-state';
+    const USERS_KEY = 'dh-pos-standalone-users';
+    const defaultPrices = [5,10,15,20,25,30,35,40,50,60,75,100,150,200];
+    const defaultUsers = { admin: 'admin123', 'محمد': '', 'صلاح': '' };
+    const payments = [
+      {name:'نقدي', icon:'▣', tint:'green'}, {name:'موبي كاش', icon:'◈', tint:'blue'}, {name:'ادفع لي', icon:'↗', tint:'orange'}, {name:'يسر', icon:'◇', tint:'violet'}, {name:'البطاقة المصرفية', icon:'▤', tint:'pink'}
+    ];
+    const state = {
+      theme: localStorage.getItem('dh-pos-standalone-theme') || 'dark',
+      users: read(USERS_KEY, defaultUsers), user:'', shift:false, opening:0, openingInput:'',
+      prices:defaultPrices.slice(), products:[], cart:[], held:null, sales:{'نقدي':0,'موبي كاش':0,'ادفع لي':0,'يسر':0,'البطاقة المصرفية':0}, expenses:[], transactions:[], perfumeSales:0,
+      service:'نقدي', returnMode:false, customer:{name:'',phone:'',note:''}, branches:['الفرع الرئيسي'], branch:'الفرع الرئيسي', storeName:'دار الحجاب', invoiceNo:1000, search:'', customPrice:'',
+      notice:'نظام التشغيل جاهز لاستقبال المبيعات', loginName:'', loginPassword:'', modal:null,
+      autoPrint: localStorage.getItem('dh-pos-auto-print') !== 'false', receiptWidth: '70', receipt:null, lastReceipt:null, clock:''
+    };
+    const CLOUD_SUPABASE_URL = 'https://wokxnuebjmotypipzlpg.supabase.co';
+    const CLOUD_SUPABASE_ANON_KEY = 'sb_publishable_kCHbnrg7LRgPLzH2hccAQg_So3TSK16';
+    const cloudClient = window.supabase?.createClient(CLOUD_SUPABASE_URL, CLOUD_SUPABASE_ANON_KEY);
+    async function syncSaleToCloud(receipt){
+      if(!cloudClient || !receipt || receipt.quote) return;
+      const payload = {
+        invoice_no: Number(receipt.invoiceNo),
+        branch_name: receipt.branch || 'الفرع الرئيسي',
+        cashier: receipt.cashier || 'غير محدد',
+        payment_method: receipt.service || 'نقدي',
+        total_amount: Number(receipt.total || 0)
+      };
+      const {error} = await cloudClient.from('sales_logs').insert(payload);
+      if(error){
+        console.error('Supabase sales_logs sync failed:', error);
+        toast('تم حفظ البيع محلياً، وتعذرت المزامنة مع التقرير السحابي', true);
+      }
+    }
+    const APP_VERSION = '1.2.0';
+    const UPDATE_MANIFEST_URL = 'https://raw.githubusercontent.com/mohammd01/dh-pos/main/version.txt';
+    const GITHUB_APP_URL = 'https://github.com/mohammd01/dh-pos/raw/refs/heads/main/index.html';
+    let remoteUpdateVersion = '';
+    function compareVersions(remote, current){
+      const r=String(remote||'0').trim().split('.').map(Number), c=String(current||'0').trim().split('.').map(Number);
+      for(let i=0;i<Math.max(r.length,c.length);i++){const rv=Number.isFinite(r[i])?r[i]:0,cv=Number.isFinite(c[i])?c[i]:0;if(rv!==cv)return rv>cv?1:-1;}
+      return 0;
+    }
+    async function checkForUpdates(manual=false){
+      try{
+        const response=await fetch(`${UPDATE_MANIFEST_URL}?t=${Date.now()}`,{cache:'no-store'});
+        if(!response.ok)throw new Error(`HTTP ${response.status}`);
+        const remote=(await response.text()).trim();
+        remoteUpdateVersion=remote;
+        if(compareVersions(remote,APP_VERSION)>0){
+          if(state.cart.length){state.notice=`يتوفر تحديث ${remote} — أغلق الفاتورة أو احفظها مؤقتاً قبل التحديث`;render();return;}
+          if(confirm(`يتوفر تحديث جديد للمنظومة (${remote})\nالإصدار الحالي: ${APP_VERSION}\n\nسيتم الحفاظ على بيانات المبيعات المحلية. هل تريد التحديث الآن؟`)){
+            save();
+            if(window.location.protocol==='file:')window.open(GITHUB_APP_URL,'_blank');
+            else window.location.reload();
+          }
+        }else if(manual){toast(`أنت تستخدم أحدث إصدار (${APP_VERSION})`);}
+      }catch(error){
+        console.warn('GitHub update check failed:',error);
+        if(manual)toast('تعذر فحص تحديث GitHub — تحقق من اتصال الإنترنت',true);
+      }
+    }
+    const $ = (selector, root=document) => root.querySelector(selector);
+    const esc = (value) => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[ch]));
+    function read(key, fallback){ try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify({prices:state.prices,products:state.products,sales:state.sales,expenses:state.expenses,perfumeSales:state.perfumeSales,transactions:state.transactions,storeName:state.storeName,invoiceNo:state.invoiceNo,shift:state.shift,user:state.user,opening:state.opening,shiftTime:state.shiftTime,customer:state.customer,branches:state.branches,branch:state.branch})); localStorage.setItem(USERS_KEY, JSON.stringify(state.users)); localStorage.setItem('dh-pos-standalone-theme',state.theme); localStorage.setItem('dh-pos-auto-print',String(state.autoPrint)); localStorage.setItem('dh-pos-receipt-width',state.receiptWidth); }
+    function money(value){ return `${Math.abs(Number(value)||0).toFixed(2)} د.ل`; }
+    function receiptMoney(value){ const number=Number(value)||0; return `${number<0?'-':''}${Math.abs(number).toFixed(2)} د.ل`; }
+    function dateLabel(){ return new Intl.DateTimeFormat('ar-LY',{day:'2-digit',month:'short',year:'numeric'}).format(new Date()); }
+    function timeLabel(){ return new Intl.DateTimeFormat('ar-LY',{hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date()); }
+    function initial(name){ return String(name||'').trim().charAt(0)||'؟'; }
+    function toast(message, error=false){ const node=document.createElement('div'); node.textContent=message; node.style.cssText=`position:fixed;z-index:100;bottom:25px;right:25px;max-width:320px;padding:12px 16px;border-radius:9px;color:#fff;background:${error?'#7f1d36':'#173a32'};border:1px solid ${error?'#ef7180':'#47c78c'};box-shadow:0 12px 30px rgba(0,0,0,.28);font:700 12px Tajawal,sans-serif`; document.body.appendChild(node); setTimeout(()=>node.remove(),2600); }
+    function setNotice(text){ state.notice=text; }
+    function total(){ return state.cart.reduce((sum,item)=>sum+item.price*item.qty,0); }
+    function totalSales(){ return Number(state.sales['نقدي']||0); }
+    function totalBank(){ return ['موبي كاش','ادفع لي','يسر','البطاقة المصرفية'].reduce((s,k)=>s+(state.sales[k]||0),0); }
+    function totalAllSales(){ return Object.values(state.sales).reduce((sum,value)=>sum+Number(value||0),0); }
+    function expensesTotal(){ return state.expenses.reduce((s,e)=>s+e.value,0); }
+    function expectedCash(){ return state.opening+(state.sales['نقدي']||0)-expensesTotal(); }
+    function showModal(type){ state.modal=type; render(); }
+    function clearCustomer(){state.customer={name:'',phone:'',note:''};save();render();toast('تم مسح بيانات الزبون')}
+    function saveCustomer(form){const data=new FormData(form);state.customer={name:String(data.get('customerName')||'').trim(),phone:String(data.get('customerPhone')||'').trim(),note:String(data.get('customerNote')||'').trim()};save();state.modal=null;render();toast(state.customer.name?'تم حفظ بيانات الزبون':'تمت إزالة بيانات الزبون')}
+    function customerLabel(){return state.customer.name||'زبون نقدي'}
+    function paymentLabel(service){return ({'نقدي':'Cash','موبي كاش':'Mobile Cash','ادفع لي':'تفعيلي','يسر':'يسر','البطاقة المصرفية':'بطاقة'})[service]||service}
+    function addBranch(){if(state.user!=='admin')return toast('إدارة الفروع متاحة للأدمن فقط',true);const name=prompt('اسم الفرع الجديد:')?.trim();if(!name)return;if(state.branches.includes(name))return toast('هذا الفرع موجود بالفعل',true);state.branches.push(name);state.branch=name;save();render();toast(`تمت إضافة الفرع: ${name}`)}
+    function setBranch(name){if(state.user!=='admin')return;name=String(name||'').trim();if(!state.branches.includes(name))return;state.branch=name;save();render();toast(`تم اختيار الفرع: ${name}`)}
+    function hideModal(){ state.modal=null; render(); }
+
+    function login(name,password){
+      name=String(name||'').trim();
+      if(state.users[name]===undefined) return toast('بيانات الدخول غير صحيحة',true);
+      if(state.users[name] && state.users[name]!==password) return toast('كلمة المرور غير صحيحة',true);
+      state.user=name; state.openingInput=''; state.modal='shift'; setNotice(`مرحباً ${name}، افتح ورديتك للبدء`); save(); render(); toast(`تم تسجيل الدخول باسم ${name}`);
+    }
+    function quickLogin(name){ const password=state.users[name] ? window.prompt(`أدخل كلمة المرور للمستخدم ${name}`) : ''; if(password===null) return; login(name,password); }
+    function startShift(){ state.shiftTime = new Date().toLocaleString('en-GB'); state.opening=Number(state.openingInput)||0; state.shift=true; state.modal=null; state.openingInput=''; setNotice('الوردية نشطة — يمكنك بدء البيع الآن'); save(); render(); toast('بدأت الوردية بنجاح'); }
+    function logout(){ state.shift=false; state.user=''; state.cart=[]; state.modal=null; setNotice('تم تسجيل الخروج — البيانات محفوظة محلياً'); save(); render(); }
+    function printZReport(closeAfter=false){
+      const snapshot={user:state.user,shiftTime:state.shiftTime,opening:state.opening,sales:{...state.sales},expenses:[...state.expenses],transactions:[...state.transactions],perfumeSales:state.perfumeSales,total:totalSales(),expected:expectedCash(),date:dateLabel(),invoiceNo:state.invoiceNo};
+      const area=$('#printArea'); area.className='receipt z-report-long'; area.innerHTML=zReportHTML(snapshot);
+      const cleanup=()=>{area.innerHTML='';area.className='receipt';};
+      const finalize=()=>{ if(!closeAfter){cleanup();state.modal=null;render();toast('تمت طباعة Z-Report دون إغلاق الوردية');return;} state.shift=false;state.user='';state.cart=[];state.sales={'نقدي':0,'موبي كاش':0,'ادفع لي':0,'يسر':0,'البطاقة المصرفية':0};state.expenses=[];state.transactions=[];state.perfumeSales=0;state.opening=0;state.shiftTime='';state.modal=null;cleanup();save();render();toast('تمت طباعة التقرير وإغلاق الوردية بعد التأكيد'); };
+      const webview=window.chrome?.webview;
+      if(webview?.postMessage){webview.postMessage('print_receipt');setTimeout(finalize,900);return;}
+      window.onafterprint=()=>{window.onafterprint=null;finalize();}; window.print();
+    }
+    function zReportHTML(r){
+      const sales=r.sales||{}; const expTotal=(r.expenses||[]).reduce((sum,e)=>sum+Number(e.value||0),0); const tx=r.transactions||[]; const items=tx.reduce((sum,t)=>sum+(t.items||[]).reduce((n,i)=>n+Number(i.qty||0),0),0); const customers=tx.filter(t=>t.customer?.name).length; const shiftStart=r.shiftTime||r.date||'غير مسجل'; const shiftEnd=new Date().toLocaleString('ar-LY');
+      const row=(label,value)=>`<div class="zr-row"><span>${label}</span><strong>${value}</strong></div>`;
+      const transactionRows=tx.length?tx.map(t=>`<tr><td>#${esc(String(t.invoiceNo||''))}</td><td>${esc(t.time||'—')}<br><span class="zr-muted">${esc(t.customer?.name||'زبون نقدي')}</span></td><td>${esc(t.service||'نقدي')}</td><td class="zr-amount">${receiptMoney(t.total)}</td></tr>`).join(''):`<tr><td colspan="4" style="text-align:center">لا توجد فواتير مسجلة في هذه الوردية</td></tr>`;
+      const expenseRows=r.expenses?.length?r.expenses.map(e=>`<tr><td>${esc(e.name)}</td><td>${esc(e.id||'—')}</td><td class="zr-amount">${receiptMoney(e.value)}</td></tr>`).join(''):`<tr><td colspan="3" style="text-align:center">لا توجد مصاريف مسجلة</td></tr>`;
+      return `<div dir="rtl" style="font-family:Tajawal,Tahoma,Arial,sans-serif;color:#111;background:#fff;text-align:right"><div class="zr-head"><div class="zr-brand">DH</div><div class="zr-title">دار الحجاب</div><div class="zr-sub">فينيسيا · POS System Pro · Since 2001</div><div class="zr-badge">تقرير الإغلاق المالي التفصيلي — Z-REPORT</div></div><div class="zr-section"><div class="zr-section-title">بيانات الوردية</div>${row('رقم آخر فاتورة',`#${esc(String((r.invoiceNo||1001)-1))}`)}${row('الكاشير',esc(r.user||'admin'))}${row('وقت فتح الوردية',esc(shiftStart))}${row('وقت إصدار التقرير',esc(shiftEnd))}${row('حالة التقرير','نسخة تفصيلية للمراجعة')}</div><div class="zr-section"><div class="zr-section-title">ملخص النشاط</div>${row('عدد الأصناف المباعة',`${items} صنف`)}${row('مبيعات العطور',receiptMoney(r.perfumeSales||0))}</div><div class="zr-section"><div class="zr-section-title">تفصيل طرق الدفع</div>${row('نقدي',receiptMoney(sales['نقدي']||0))}${row('موبي كاش',receiptMoney(sales['موبي كاش']||0))}${row('ادفع لي',receiptMoney(sales['ادفع لي']||0))}${row('يسر',receiptMoney(sales['يسر']||0))}${row('البطاقة المصرفية',receiptMoney(sales['البطاقة المصرفية']||0))}${row('إجمالي المدفوعات المصرفية',receiptMoney(totalBank()))}</div><div class="zr-section"><div class="zr-section-title">الحركات النقدية والمصاريف</div>${row('الرصيد الافتتاحي',receiptMoney(r.opening||0))}${row('إجمالي المصاريف',receiptMoney(expTotal))}${row('النقدية المتوقعة في الخزينة',receiptMoney(r.expected||0))}<table class="zr-table"><thead><tr><th>بيان المصروف</th><th>المرجع</th><th>القيمة</th></tr></thead><tbody>${expenseRows}</tbody></table></div><div class="zr-total">${row('إجمالي المبيعات',receiptMoney(r.total||0))}<div class="zr-row zr-grand"><span>الصافي بعد المصاريف</span><strong>${receiptMoney((r.total||0)-expTotal)}</strong></div></div><div class="zr-note">هذا التقرير طويل ومتكامل في ورقة واحدة، ولا يؤدي إلى إغلاق الوردية عند اختيار «طباعة التقرير فقط».</div><div class="zr-footer"><div>*** شكراً لاختياركم دار الحجاب ***</div><div>تقرير موثق إلكترونياً · تم التطوير من قبل محمد الغرياني</div></div></div>`;
+    }
+    function expensesTotalSnapshot(items){return items.reduce((sum,item)=>sum+Number(item.value||0),0);}
+    function closeShift(){ state.modal='zreport'; render(); }
+    function addPrice(price){ const final=state.returnMode?-Math.abs(price):Math.abs(price); const existing=state.cart.find(i=>!i.name&&i.price===final); if(existing) existing.qty++; else state.cart.push({id:`p-${Date.now()}-${price}`,price:final,qty:1}); setNotice(`${money(price)} أضيفت إلى السلة`); render(); }
+    function addProduct(product){ const final=state.returnMode?-Math.abs(product.price):Math.abs(product.price); const existing=state.cart.find(i=>i.name===product.name&&i.price===final); if(existing) existing.qty++; else state.cart.push({id:`b-${Date.now()}-${product.barcode}`,name:product.name,price:final,qty:1}); setNotice(`${product.name} أضيفت إلى السلة`); render(); }
+    function removeItem(id){ state.cart=state.cart.filter(i=>i.id!==id); render(); }
+    function clearCart(){ if(!state.cart.length)return;state.cart=[];setNotice('تم تفريغ السلة');render(); }
+    function holdBill(){ if(!state.cart.length)return toast('السلة فارغة، لا توجد فاتورة لتجميدها',true);state.held=state.cart;state.cart=[];setNotice('تم تجميد الفاتورة الحالية');render();toast('تم تجميد الفاتورة'); }
+    function restoreBill(){ if(!state.held?.length)return toast('لا توجد فاتورة مجمدة',true);if(state.cart.length&&!confirm('استبدال السلة الحالية بالفاتورة المجمدة؟'))return;state.cart=state.held;state.held=null;setNotice('تم استرجاع الفاتورة المجمدة');render(); }
+    function chooseService(service){ if(state.returnMode&&service!=='نقدي')return toast('الاسترجاع متاح للدفع النقدي فقط',true);state.service=service;render(); }
+    function toggleReturn(){ if(!state.returnMode&&state.service!=='نقدي'){state.service='نقدي';toast('تم تحويل طريقة الدفع إلى نقدي لوضع الاسترجاع')}state.returnMode=!state.returnMode;render(); }
+    function receiptFromCart(quote){ return {invoiceNo:state.invoiceNo,date:dateLabel(),time:timeLabel(),storeName:state.storeName,branch:state.branch,cashier:state.user,service:state.service,customer:{...state.customer},items:state.cart.map(i=>({...i})),total:total(),isReturn:state.returnMode,quote}; }
+    function completeSale(quote=false){
+      if(!state.cart.length)return toast(quote?'السلة فارغة لإنشاء عرض أسعار':'الفاتورة فارغة',true);
+      const receipt=receiptFromCart(quote); state.lastReceipt=receipt;
+      if(!quote){ state.sales[state.service]=(state.sales[state.service]||0)+receipt.total;state.perfumeSales+=state.cart.filter(i=>i.name).reduce((s,i)=>s+i.price*i.qty,0);state.transactions.push({...receipt,items:receipt.items.map(i=>({...i}))});state.invoiceNo++;state.cart=[];state.returnMode=false;state.service='نقدي';setNotice('عملية البيع اكتملت — تم تجهيز Cash للمعاملة التالية');toast('تم إتمام البيع بنجاح — طريقة الدفع التالية Cash'); }
+      else { setNotice('عرض الأسعار جاهز للطباعة');toast('تم تجهيز عرض الأسعار للطباعة'); }
+      save();render(); if(!quote) syncSaleToCloud(receipt); if(state.autoPrint||quote) setTimeout(()=>printReceipt(receipt),160);
+    }
+    function printReceipt(receipt=state.lastReceipt){ if(!receipt)return toast('لا توجد فاتورة لإعادة طباعتها',true);state.lastReceipt=receipt;const area=$('#printArea');area.className='receipt r70';area.innerHTML=receiptHTML(receipt); const webview=window.chrome?.webview; if(webview?.postMessage){webview.postMessage('print_receipt');setTimeout(()=>{area.innerHTML=''},900);return;} window.print(); }
+    function receiptHTML(r){ const date = new Date(); const printedDate = `${String(date.getDate()).padStart(2,'0')}/${String(date.getMonth()+1).padStart(2,'0')}/${date.getFullYear()}`; const reference = `CD${String(r.invoiceNo).padStart(4,'0')}`; const itemRows=(r.items||[]).map(i=>`<div class="receipt-item"><div><b>${esc(i.name||'قطعة')}</b><span>${i.qty} × ${receiptMoney(i.price)}</span></div><strong>${receiptMoney(i.price*i.qty)}</strong></div>`).join(''); return `<div class="receipt-brand">DH</div><div class="receipt-sub receipt-name">دار الحجاب</div><div class="receipt-sub receipt-branch">الفرع: ${esc(r.branch||'الفرع الرئيسي')}</div><div class="receipt-sub receipt-since">تأسست سنة 2001</div><div class="rule"></div><div class="receipt-meta receipt-line"><span>التاريخ</span><span>${printedDate}</span></div><div class="receipt-meta receipt-line"><span>رقم الفاتورة</span><b>${reference}</b></div><div class="receipt-meta receipt-line"><span>الكاشير</span><span>${esc(r.cashier||'1')}</span></div><div class="receipt-meta receipt-line receipt-payment"><span>الدفع</span><span>${esc(paymentLabel(r.service))}</span></div>${r.customer?.name?`<div class="receipt-meta receipt-line"><span>الزبون</span><span>${esc(r.customer.name)}</span></div>`:''}${r.customer?.phone?`<div class="receipt-meta receipt-line"><span>الهاتف</span><span>${esc(r.customer.phone)}</span></div>`:''}<div class="rule"></div><div class="receipt-items">${itemRows}</div><div class="rule"></div><div class="receipt-total receipt-line receipt-grand-total"><span>الإجمالي</span><strong>${receiptMoney(r.total)}</strong></div><p class="receipt-thanks">شكراً لزيارتكم<br>نتمنى لكم يوماً سعيداً</p></div>`; }
+    function addCustomPrice(){const value=Number(state.customPrice);if(!value||value<=0)return toast('أدخل سعراً صحيحاً',true);if(state.prices.includes(value))return toast('هذا السعر موجود بالفعل',true);state.prices.push(value);state.prices.sort((a,b)=>a-b);state.customPrice='';save();render();toast(`تمت إضافة فئة ${value} د.ل`);}
+    function addExpense(){const name=prompt('بيان المصروف:')?.trim();if(!name)return;const value=Number(prompt('قيمة المصروف بالدينار:')||0);if(!value||value<=0)return toast('قيمة المصروف غير صحيحة',true);state.expenses.push({id:String(Date.now()),name,value});save();render();toast('تم تسجيل المصروف');}
+    function updatePassword(name){const value=prompt(`كلمة المرور الجديدة لـ ${name}`);if(value===null)return;state.users[name]=value.trim();save();render();toast('تم تحديث كلمة المرور');}
+    function addUser(){const name=prompt('اسم الكاشير الجديد')?.trim();if(!name)return;if(state.users[name]!==undefined)return toast('اسم المستخدم موجود بالفعل',true);state.users[name]=prompt('كلمة المرور (اختياري)')||'';save();render();toast('تمت إضافة المستخدم');}
+    function removeUser(name){if(name==='admin')return toast('لا يمكن حذف الأدمن الرئيسي',true);if(!confirm(`حذف المستخدم ${name}؟`))return;delete state.users[name];save();render();toast('تم حذف المستخدم');}
+    function importCSV(file){const reader=new FileReader();reader.onload=()=>{const rows=String(reader.result||'').split(/\r?\n/).filter(Boolean);state.products=rows.flatMap((row,index)=>{const [barcode,name,price]=row.split(',').map(c=>c.trim());if(index===0&&/barcode|باركود/i.test(barcode))return[];return barcode&&name&&Number(price)>0?[{barcode,name,price:Number(price)}]:[]});save();render();toast(`تم استيراد ${state.products.length} صنفاً`)};reader.readAsText(file,'UTF-8');}
+
+    function loginHTML(){ return `<div class="login-visual" style="background-image:linear-gradient(90deg,rgba(15,23,42,.3),rgba(15,23,42,.9)),url('${ASSETS.hero}')"><div class="visual-grid"></div><div class="quote"><span class="eyebrow">✦ دار الحجاب — فينيسيا</span><h1>تشغيل أنيق.<br><em>بيع أسرع.</em></h1><p>واجهة نقاط بيع مهيأة للسرعة والدقة، بروح بوتيك فاخر.</p><div class="quote-line"><span></span>Since 2001</div></div><div class="visual-foot"><span>DH / POS PRO</span><span>تم التطوير من قبل محمد الغرياني</span></div></div><div class="login-panel"><div class="login-inner"><div class="brand"><div class="brand-mark"><img src="${ASSETS.logo}" alt="شعار دار الحجاب"></div><div><strong>دار الحجاب</strong><small>نظام التشغيل الاحترافي</small></div></div><div class="login-title"><span class="eyebrow">مرحباً بعودتك</span><h2>افتح مساحة العمل</h2><p>اختر حسابك للبدء، أو استخدم الدخول التقليدي.</p></div><div class="quick-grid">${Object.keys(state.users).map(name=>`<button class="quick" data-action="quick-login" data-user="${esc(name)}"><span class="avatar">${name==='admin'?'⌘':esc(initial(name))}</span><b>${name==='admin'?'الإدارة':esc(name)}</b><small>${state.users[name]?'كلمة مرور':'دخول سريع'}</small></button>`).join('')}</div><div class="divider"><span>أو الدخول بالحساب</span></div><form id="loginForm"><div class="field-stack"><label>اسم المستخدم<input name="username" value="${esc(state.loginName)}" placeholder="مثال: admin" autocomplete="username"></label><label>كلمة المرور<div class="password"><input name="password" type="password" value="${esc(state.loginPassword)}" placeholder="••••••••" autocomplete="current-password"><span>⌘</span></div></label></div><button class="primary full" type="submit">دخول المنظومة <span>‹</span></button></form><p class="note">الدخول السريع متاح للكاشير بدون كلمة مرور، ويمكن للإدارة إدارة الحسابات من لوحة المستخدمين.</p></div></div>`; }
+    function appHTML(){
+      const visible=state.prices.filter(p=>!state.search||String(p).includes(state.search));
+      const count=state.cart.reduce((s,i)=>s+i.qty,0);
+      return `<header class="topbar"><div class="top-brand"><div class="small-mark"><img src="${ASSETS.logo}" alt=""></div><div><strong>دار الحجاب</strong><small>فينيسيا <i>•</i> POS Pro</small></div></div><div class="top-status"><span class="dot"></span> الوردية نشطة <span class="metric-sep"></span> ${state.clock}</div><div class="top-actions">${state.user==='admin'?'<button class="top-action" data-action="admin" title="إدارة المستخدمين">♙</button>':''}<button class="top-action" data-action="updates">◉</button><button class="top-action" data-action="theme">${state.theme==='dark'?'☼':'☾'}</button><button class="user-chip" data-action="settings"><span><b>${esc(state.user)}</b><small>الكاشير الحالي</small></span><span class="user-avatar">${esc(initial(state.user))}</span></button></div></header><div class="workspace"><aside class="sidebar"><div class="kicker">مساحة العمل</div><nav class="nav"><button class="active">▦ <span>نقطة البيع</span><span class="live">Live</span></button><button data-action="report">▥ <span>التقارير</span></button><button data-action="settings">⚙ <span>الإعدادات</span></button></nav><div class="sep"></div><div class="kicker">طريقة الدفع</div><div class="payments">${payments.map(p=>`<button class="payment ${state.service===p.name?'selected':''}" data-action="service" data-service="${esc(p.name)}"><span class="payment-icon ${p.tint}">${p.icon}</span><span>${esc(p.name)}</span>${state.service===p.name?'<span class="check">✓</span>':''}</button>`).join('')}</div><div class="spacer"></div><div class="promo" style="background-image:linear-gradient(180deg,rgba(20,12,18,.12),rgba(20,12,18,.95)),url('${ASSETS.still}')"><em>DH SIGNATURE</em><strong>كل عملية<br>تحمل طابعنا.</strong><small>أناقة في التفاصيل</small></div><button class="logout" data-action="logout">⇥ تسجيل الخروج</button></aside><main class="main"><div class="heading"><div><span class="eyebrow">نقطة البيع / اليوم</span><h1>صباح الخير، ${esc(state.user)}</h1><p>${dateLabel()} <span>•</span> ${esc(state.notice)}</p></div><div class="metrics"><div><span>إجمالي المبيعات</span><strong>${money(totalSales())}</strong></div><div class="metric-sep"></div><div><span>العطور اليوم</span><strong>${money(state.perfumeSales)}</strong></div></div></div><div class="banner"><div class="banner-icon">▣</div><div><strong>${state.returnMode?'وضع الاسترجاع مفعّل':'وضع البيع العادي'}</strong><small>${state.returnMode?'كل الأسعار الجديدة ستُسجل كاسترجاع نقدي':'اختر سعراً لإضافته مباشرة إلى سلة المبيعات'}</small></div>${state.returnMode?'<button data-action="return-off">إلغاء الوضع ×</button>':''}</div><div class="customer-strip"><div class="customer-avatar">${esc(initial(state.customer.name||'ز'))}</div><div class="customer-meta"><strong>${esc(customerLabel())}</strong><small>${state.customer.phone?esc(state.customer.phone):'لا توجد بيانات اتصال'}${state.customer.note?' · ملاحظة محفوظة':''}</small></div><div class="customer-actions"><button data-action="customer">${state.customer.name?'تعديل البيانات':'إضافة زبون'}</button>${state.customer.name?'<button data-action="customer-clear">مسح</button>':''}</div></div><section class="card"><div class="section-head"><div><span class="eyebrow">التسعير السريع</span><h2>شجرة الأسعار</h2></div><div class="tools"><label class="search">⌕ <input data-input="search" value="${esc(state.search)}" placeholder="بحث في الأسعار"></label><span class="count">${visible.length} فئات</span></div></div><div class="price-grid">${visible.map(p=>`<button class="price" data-action="price" data-price="${p}"><b>${p}</b><small>دينار ليبي</small><i>↗</i></button>`).join('')}</div></section><section class="card products"><div class="section-head compact"><div><span class="eyebrow">المنتجات المستوردة</span><h2>باركود العطور</h2></div><label class="outline">＋ استيراد CSV<input type="file" accept=".csv" data-input="csv" hidden></label></div>${state.products.length?`<div class="product-grid">${state.products.slice(0,4).map(p=>`<button class="product" data-action="product" data-barcode="${esc(p.barcode)}"><span class="product-icon">✦</span><span><b>${esc(p.name)}</b><small>${money(p.price)}</small></span>＋</button>`).join('')}</div>`:'<div class="empty-products">◇ <span>استورد ملف CSV بالترتيب: باركود، اسم الصنف، السعر</span></div>'}</section></main><section class="cart"><div class="cart-head"><div><span class="eyebrow">Current order</span><h2>السلة الحالية</h2></div><span class="cart-badge">${count} عناصر</span></div><div class="cart-controls"><button data-action="hold">⇩ تجميد الفاتورة</button><button data-action="restore" class="${state.held?'held':''}">⇧ استرجاع ${state.held?'<span class="dot"></span>':''}</button></div><div class="cart-list">${state.cart.length?state.cart.map(i=>`<div class="cart-line"><div class="line-leading"><button class="remove" data-action="remove" data-id="${i.id}">×</button><div><strong>${esc(i.name||`فئة سعرية ${Math.abs(i.price)}`)}</strong><small>${i.qty} × ${money(i.price)}</small></div></div><span class="line-total ${i.price<0?'return-total':''}">${i.price<0?'-':''}${money(i.price*i.qty)}</span></div>`).join(''):'<div class="empty-cart"><div class="empty-icon">▱</div><strong>السلة بانتظارك</strong><small>اختر فئة سعرية من اللوحة لإضافة أول عنصر</small></div>'}</div><div class="summary"><div class="summary-row"><span>المجموع الفرعي</span><strong>${money(total())}</strong></div><div class="summary-row muted"><span>الضريبة</span><span>مشمولة</span></div><div class="summary-total"><span>الإجمالي المستحق</span><strong>${money(total())}</strong></div><div class="selected-pay"><span class="payment-icon green">▣</span><span>الدفع عبر <b>${esc(state.service)}</b></span><span class="check">✓</span></div><button class="checkout" data-action="checkout" ${state.cart.length?'':'disabled'}>▣ إتمام البيع <span>${money(total())}</span></button><div class="cart-actions"><button data-action="clear">⌫ تفريغ السلة</button>${state.lastReceipt?'<button data-action="reprint">▣ إعادة الطباعة</button>':''}<button data-action="settings">⚙ المزيد</button></div></div></section></div><footer class="footer"><span><span class="dot"></span> جميع الأنظمة تعمل بشكل طبيعي</span><span>DH POS PRO <i>v1.2.0</i>　 تم التطوير من قبل محمد الغرياني <button data-action="updates" style="margin-right:8px;padding:3px 8px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--muted);font:inherit;cursor:pointer">فحص تحديث GitHub</button></span></footer>`;
+    }
+    function modalHTML(){
+      if(state.modal==='customer') return `<div class="backdrop"><section class="modal"><div class="modal-head"><div class="modal-title"><span>♙</span><h2>بيانات الزبون</h2></div><button class="icon-btn" data-action="close">×</button></div><div class="customer-hint"><b>●</b><span>احفظ بيانات الزبون لإظهارها في الفاتورة وتسهيل خدمة ما بعد البيع.</span></div><form id="customerForm" class="customer-form"><div class="customer-form-grid"><label class="field-label">اسم الزبون<input name="customerName" value="${esc(state.customer.name)}" placeholder="مثال: سارة محمد" autocomplete="name" autofocus></label><label class="field-label">رقم الهاتف<input name="customerPhone" value="${esc(state.customer.phone)}" placeholder="09x xxx xxxx" inputmode="tel" autocomplete="tel"></label></div><label class="field-label">ملاحظة الطلب<textarea name="customerNote" placeholder="مقاس، لون، أو ملاحظة خاصة بالطلب">${esc(state.customer.note)}</textarea></label><div style="display:flex;gap:10px;margin-top:3px"><button class="primary" type="submit" style="flex:1">حفظ البيانات ✓</button><button class="outline" type="button" data-action="close">إلغاء</button></div></form></section></div>`;
+      if(state.modal==='shift') return `<div class="backdrop"><section class="modal"><div class="modal-head"><div class="modal-title"><span>◷</span><h2>بداية الوردية</h2></div></div><div class="intro"><span class="disc">▣</span><p>أدخل المبلغ النقدي الافتتاحي الموجود في الخزينة قبل بدء العمل.</p></div><label class="field-label">الرصيد الافتتاحي<input data-input="opening" type="number" value="${esc(state.openingInput)}" placeholder="0.00" autofocus></label><button class="primary full" data-action="start-shift">تأكيد وبدء العمل ✓</button></section></div>`;
+      if(state.modal==='settings') return `<div class="backdrop"><section class="modal"><div class="modal-head"><div class="modal-title"><span>⚙</span><h2>الإعدادات والعمليات</h2></div><button class="icon-btn" data-action="close">×</button></div><div class="settings"><div class="setting"><div><strong>وضع الاسترجاع</strong><small>تحويل الأسعار إلى قيم سالبة للبيع النقدي</small></div><button class="switch ${state.returnMode?'on':''}" data-action="return-toggle"><span></span></button></div><div class="setting"><div><strong>الطباعة التلقائية</strong><small>إرسال الفاتورة للطابعة بعد نجاح الدفع مباشرة</small></div><button class="switch ${state.autoPrint?'on':''}" data-action="auto-print"><span></span></button></div><div class="setting"><div><strong>مقاس الفاتورة</strong><small>مقاس ثابت مطابق للنموذج: 70 × 70 مم</small></div><div class="inline"><button class="active" disabled>70</button></div></div><div class="setting"><div><strong>إضافة فئة سعرية</strong><small>أضف سعراً جديداً لشجرة البيع السريع</small></div><div class="inline"><input data-input="custom" type="number" value="${esc(state.customPrice)}" placeholder="السعر"><button data-action="add-price">＋</button></div></div><button class="setting-action" data-action="quote">▤<span><b>إنشاء عرض أسعار</b><small>طباعة نسخة غير ملزمة للعميل</small></span>‹</button><button class="setting-action" data-action="expense">▣<span><b>إضافة مصروف</b><small>تسجيل مصروف جديد في حركة الوردية</small></span>‹</button><button class="setting-action danger" data-action="close-shift">▣<span><b>إغلاق الوردية</b><small>إنهاء الوردية وإظهار تقرير Z</small></span>‹</button></div></section></div>`;
+      if(state.modal==='zreport') return `<div class="backdrop"><section class="modal wide"><div class="modal-head"><div class="modal-title"><span>▥</span><h2>تقرير Z-Report التفصيلي</h2></div><button class="icon-btn" data-action="close">×</button></div><div class="report-hero"><div><span class="eyebrow">تقرير طويل في ورقة واحدة</span><strong>${money(totalSales())}</strong><small>إجمالي المبيعات · ${state.expenses.length} مصروف</small></div><div class="report-art" style="background-image:url('${ASSETS.fabric}')">✦</div></div><div class="report-grid"><div><span>النقدية المتوقعة</span><strong>${money(expectedCash())}</strong><small>افتتاحي + نقدي - مصاريف</small></div><div><span>المبيعات المصرفية</span><strong>${money(totalBank())}</strong><small>كل طرق الدفع غير النقدية</small></div><div><span>مبيعات العطور</span><strong>${money(state.perfumeSales)}</strong><small>من المنتجات الممسوحة</small></div><div><span>المصاريف</span><strong style="color:var(--danger)">${money(expensesTotal())}</strong><small>${state.expenses.length} عمليات مسجلة</small></div></div><div class="report-kpi"><span>الطباعة الافتراضية</span><strong>ورقة طويلة واحدة</strong></div><div class="report-details"><div><span>الكاشير</span><b>${esc(state.user)}</b></div><div><span>فتح الوردية</span><b>${esc(state.shiftTime||'—')}</b></div><div><span>التاريخ</span><b>${dateLabel()}</b></div></div><div class="z-report-actions"><button class="primary" data-action="z-print">▣ طباعة التقرير فقط</button><button class="outline danger" data-action="z-close">طباعة وإغلاق الوردية</button></div><p class="note">طباعة التقرير فقط لا تصفر المبيعات ولا تسجل خروج الكاشير. اختر إغلاق الوردية فقط بعد المطابقة الفعلية للنقدية.</p></section></div>`;
+      if(state.modal==='report') return `<div class="backdrop"><section class="modal wide"><div class="modal-head"><div class="modal-title"><span>▥</span><h2>تقرير الوردية المباشر</h2></div><button class="icon-btn" data-action="close">×</button></div><div class="report-hero"><div><span class="eyebrow">تقرير يومي موحد</span><strong>${money(totalSales())}</strong><small>إجمالي Cash فقط</small></div><div class="report-art" style="background-image:url('${ASSETS.fabric}')">✦</div></div><div class="report-grid"><div><span>Cash / نقدي</span><strong>${money(state.sales['نقدي'])}</strong><small>المبيعات النقدية فقط</small></div><div><span>Mobile Cash</span><strong>${money(state.sales['موبي كاش'])}</strong><small>مدفوعات مصرفية</small></div><div><span>تفعيلي</span><strong>${money(state.sales['ادفع لي'])}</strong><small>ادفع لي / اتصالية</small></div><div><span>يسر</span><strong>${money(state.sales['يسر'])}</strong><small>مدفوعات مصرفية</small></div><div><span>بطاقة</span><strong>${money(state.sales['البطاقة المصرفية'])}</strong><small>البطاقة المصرفية</small></div><div><span>إجمالي المصرفي</span><strong>${money(totalBank())}</strong><small>كل غير النقدي</small></div><div><span>إجمالي المدفوعات</span><strong>${money(totalAllSales())}</strong><small>Cash + المصرفي</small></div><div><span>النقدية المتوقعة</span><strong>${money(expectedCash())}</strong><small>افتتاحي + Cash - مصاريف</small></div><div><span>مبيعات العطور</span><strong>${money(state.perfumeSales)}</strong><small>من المنتجات الممسوحة</small></div><div><span>المصاريف</span><strong style="color:var(--danger)">${money(expensesTotal())}</strong><small>${state.expenses.length} عمليات مسجلة</small></div></div><div class="report-details"><div><span>الفرع</span><b>${esc(state.branch||'الفرع الرئيسي')}</b></div><div><span>الكاشير</span><b>${esc(state.user)}</b></div><div><span>الوردية</span><b><span class="dot"></span> نشطة الآن</b></div><div><span>فتح الوردية</span><b>${esc(state.shiftTime||'—')}</b></div><div><span>الفواتير</span><b>${state.transactions.length} فاتورة</b></div><div><span>التاريخ</span><b>${dateLabel()}</b></div></div></section></div>`
+      if(state.modal==='admin') return `<div class="backdrop"><section class="modal wide"><div class="modal-head"><div class="modal-title"><span>♙</span><h2>إدارة المستخدمين</h2></div><button class="icon-btn" data-action="close">×</button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;color:var(--muted);font-size:11px"><span>${Object.keys(state.users).length} حسابات مسجلة</span><button class="outline" data-action="add-user">＋ إضافة كاشير</button></div><div class="setting" style="margin-bottom:14px"><div><strong>فرع الفاتورة الحالي</strong><small>يظهر اسم الفرع المختار في كل فاتورة جديدة</small></div><div class="inline"><select data-input="branch" style="min-height:32px;padding:0 8px;color:var(--text);background:var(--surface2);border:1px solid var(--line2);border-radius:7px">${state.branches.map(b=>`<option value="${esc(b)}" ${state.branch===b?'selected':''}>${esc(b)}</option>`).join('')}</select><button data-action="add-branch">＋ فرع</button></div></div><div class="user-list">${Object.keys(state.users).map(name=>`<div class="user-row"><div class="user-info"><span class="avatar">${name==='admin'?'⌘':esc(initial(name))}</span><span><b>${esc(name)}</b><small>${name==='admin'?'مدير النظام':state.users[name]?'محمي بكلمة مرور':'دخول سريع'}</small></span></div><div class="row-actions"><button data-action="password" data-user="${esc(name)}">كلمة السر</button>${name!=='admin'?`<button class="danger" data-action="delete-user" data-user="${esc(name)}">حذف</button>`:''}</div></div>`).join('')}</div></section></div>`;
+      return '';
+    }
+    function render(){
+      document.documentElement.classList.toggle('light',state.theme==='light');state.clock=timeLabel();
+      const login=$('#loginScreen'), app=$('#appScreen');
+      if(!state.user||!state.shift){login.classList.remove('hidden');app.classList.add('hidden');login.innerHTML=loginHTML();}else{login.classList.add('hidden');app.classList.remove('hidden');app.innerHTML=appHTML();}
+      $('#modalRoot').innerHTML=state.modal?modalHTML():'';save();
+    }
+
+    document.addEventListener('submit',e=>{ if(e.target.id==='loginForm'){e.preventDefault();login(state.loginName,state.loginPassword);} if(e.target.id==='customerForm'){e.preventDefault();saveCustomer(e.target);} });
+    document.addEventListener('input',e=>{const el=e.target;if(el.dataset.input==='search'){state.search=el.value;render();}if(el.dataset.input==='opening')state.openingInput=el.value;if(el.dataset.input==='custom')state.customPrice=el.value;if(el.name==='username')state.loginName=el.value;if(el.name==='password')state.loginPassword=el.value;});
+    document.addEventListener('change',e=>{if(e.target.dataset.input==='csv'&&e.target.files[0])importCSV(e.target.files[0]);if(e.target.dataset.input==='branch')setBranch(e.target.value);});
+    document.addEventListener('click',e=>{
+      const el=e.target.closest('[data-action]');if(!el)return;const action=el.dataset.action;
+      if(action==='quick-login')quickLogin(el.dataset.user);else if(action==='start-shift')startShift();else if(action==='logout')logout();else if(action==='theme'){state.theme=state.theme==='dark'?'light':'dark';render();}else if(action==='updates')checkForUpdates(true);else if(action==='settings')showModal('settings');else if(action==='customer')showModal('customer');else if(action==='customer-clear')clearCustomer();else if(action==='report')showModal('report');else if(action==='admin')showModal('admin');else if(action==='close')hideModal();else if(action==='service')chooseService(el.dataset.service);else if(action==='price')addPrice(Number(el.dataset.price));else if(action==='product'){const product=state.products.find(p=>p.barcode===el.dataset.barcode);if(product)addProduct(product);}else if(action==='remove')removeItem(el.dataset.id);else if(action==='clear')clearCart();else if(action==='hold')holdBill();else if(action==='restore')restoreBill();else if(action==='checkout')completeSale();else if(action==='reprint')printReceipt();else if(action==='return-toggle')toggleReturn();else if(action==='return-off'){state.returnMode=false;render();}else if(action==='auto-print'){state.autoPrint=!state.autoPrint;render();}else if(action==='width'){state.receiptWidth=el.dataset.width;render();}else if(action==='add-price')addCustomPrice();else if(action==='quote'){const m=state.modal;state.modal=null;render();completeSale(true);state.modal=m;}else if(action==='expense')addExpense();else if(action==='z-print')printZReport(false);else if(action==='z-close'){if(confirm('هل تمت مطابقة النقدية؟ سيتم إغلاق الوردية وتصفير بياناتها بعد الطباعة.'))printZReport(true);}else if(action==='close-shift')closeShift();else if(action==='add-user')addUser();else if(action==='add-branch')addBranch();else if(action==='password')updatePassword(el.dataset.user);else if(action==='delete-user')removeUser(el.dataset.user);
+    });
+    setInterval(()=>{if(state.shift){state.clock=timeLabel();const node=$('.top-status');if(node)node.innerHTML=`<span class="dot"></span> الوردية نشطة <span class="metric-sep"></span> ${state.clock}`;}},1000);
+    const persisted=read(KEY,null);if(persisted){state.prices=persisted.prices||state.prices;state.products=persisted.products||[];state.sales={...state.sales,...(persisted.sales||{})};state.expenses=persisted.expenses||[];state.transactions=persisted.transactions||[];state.perfumeSales=persisted.perfumeSales||0;state.storeName=persisted.storeName||state.storeName;state.invoiceNo=persisted.invoiceNo||1000;state.customer={name:'',phone:'',note:'',...(persisted.customer||{})};state.branches=persisted.branches?.length?persisted.branches:['الفرع الرئيسي'];state.branch=persisted.branch||state.branches[0];if(persisted.shift&&persisted.user){state.shift=true;state.user=persisted.user;state.opening=persisted.opening||0;state.shiftTime=persisted.shiftTime||'';}}
+    render();
+    setTimeout(()=>checkForUpdates(false),3000);
+  })();
+  </script>
 </body>
-</html>
